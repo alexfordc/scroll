@@ -3,7 +3,7 @@ __author__ = 'ict'
 from calculate.graph import Graph
 
 
-def new_mcg(graph):
+def mcg(graph):
     g = Graph()
     link = []
     for node_tuple in graph.get_edge():

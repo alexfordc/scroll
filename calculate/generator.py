@@ -6,7 +6,7 @@ import calculate.similarity.core
 from calculate.graph import Graph
 
 
-def graph(data, ft_mtd, sim_mtd):
+def graph_network(data, ft_mtd, sim_mtd):
     g = Graph(True)
     data_list = list(data.items())
     ft_dict = {}
@@ -21,4 +21,17 @@ def graph(data, ft_mtd, sim_mtd):
             if g.node(id_b) is None:
                 g.add_node(id_b)
             g.add_edge((id_a, id_b), calculate.similarity.core.method(sim_mtd, ft_dict[id_a], ft_dict[id_b]))
+    return g
+
+
+def graph_edge(data):
+    g = Graph()
+    for edge in data:
+        if len(edge) != 2:
+            continue
+        if g.node(edge[0]) is None:
+            g.add_node(edge[0])
+        if g.node(edge[1]) is None:
+            g.add_node(edge[1])
+        g.add_edge(edge)
     return g

@@ -1,5 +1,7 @@
 __author__ = 'ict'
 
+import pickle
+
 
 class Graph:
     def __init__(self, sym=False):
@@ -84,3 +86,17 @@ class Graph:
 
     def get_edge(self):
         return self.__edge
+
+    def symmetric(self):
+        return self.__sym
+
+    def save(self, file):
+        with open(file, "wb") as fp:
+            pickle.dump([self.__node, self.__edge, self.__sym], fp)
+
+    def load(self, file):
+        with open(file, "rb") as fp:
+            tmp = pickle.load(fp)
+            self.__node = tmp[0]
+            self.__edge = tmp[1]
+            self.__sym = tmp[2]
