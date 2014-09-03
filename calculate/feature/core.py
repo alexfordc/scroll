@@ -4,7 +4,7 @@ from calculate.feature import price_return
 from calculate.feature import ratio
 
 method_set = {
-    "pr": price_return,
+    "price return": price_return,
     "ratio": ratio,
 }
 

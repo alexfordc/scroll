@@ -1,6 +1,6 @@
 __author__ = 'ict'
 
-from calculate.sim import cos
+from calculate.similarity import cos
 
 method_set = {
     "cos": cos,
@@ -9,7 +9,7 @@ method_set = {
 
 def method(mtd, data_a, data_b):
     if mtd not in method_set:
-        raise Exception("No such sim mothod")
+        raise Exception("No such similarity mothod")
     return method_set[mtd].compute(data_a, data_b)
 
 

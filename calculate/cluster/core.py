@@ -4,7 +4,7 @@ from calculate.cluster import connected_graph
 
 
 method_set = {
-    "cg": connected_graph,
+    "connected graph": connected_graph,
 }
 
 
