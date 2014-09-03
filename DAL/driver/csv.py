@@ -6,7 +6,6 @@ import os
 class CSV:
     def __init__(self, file=None):
         self.data = []
-        self.init = False
         self.file = file
         self.tag = None
         self.loaded = False
@@ -41,7 +40,7 @@ class CSV:
         self.loaded = True
 
     def clean(self):
-        self.data = None
+        self.data = []
         self.tag = None
         self.loaded = False
 
