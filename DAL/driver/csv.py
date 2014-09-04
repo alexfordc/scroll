@@ -17,7 +17,7 @@ class CSV:
             raise Exception("Need input file name")
         if not os.path.isfile(file):
             raise FileNotFoundError("No such file: " + file)
-        self.tag = file.lower().replace(".csv", "")
+        self.tag = file.lower().split(os.path.sep)[-1].replace(".csv", "")
         with open(file, "r") as csv_fp:
             buff = csv_fp.read()
         self.data = []

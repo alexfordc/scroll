@@ -4,17 +4,20 @@ __author__ = 'ict'
 def compute(graph):
     links = graph.nodes_link()
     node_mcg = {}
-    for node in graph.node():
+    for node in graph.get_node():
         node_link = set(links[node])
         while len(node_link) != 0:
             tmp_set = set()
             tmp_set.add(node)
-            node_link.remove(node)
+            if node in node_link:
+                node_link.remove(node)
             tmp_link = set(node_link)
             for other_node in tmp_link:
                 tmp_set.add(other_node)
-                node_link.remove(other_node)
-                links[other_node].remove(node)
+                if other_node in node_link:
+                    node_link.remove(other_node)
+                if node in links[other_node]:
+                    links[other_node].remove(node)
                 tmp_link &= links[other_node]
             if node not in node_mcg:
                 node_mcg[node] = set()
