@@ -3,12 +3,12 @@ __author__ = 'ict'
 from calculate.graph import Graph
 
 
-def number_node(graph):
+def number_node(graph, base=0):
     g = Graph(graph.symmetric())
     nodes = graph.get_node().items()
     edges = graph.get_edge().items()
     mapping = {}
-    count = 0
+    count = base
     for node in nodes:
         g.add_node(count, node[1])
         mapping[node[0]] = count
