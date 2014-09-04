@@ -1,14 +1,14 @@
 __author__ = 'ict'
 
 
-class RAM:
+class RG:
     def __init__(self, graph=None):
         self.data = []
         self.graph = graph
         self.tag = str(graph)
         self.loaded = False
 
-    def load(self, opt, graph=None):
+    def load(self, opt="edge", graph=None):
         if graph is None:
             graph = self.graph
         if graph is None:
