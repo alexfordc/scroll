@@ -1,10 +1,10 @@
 __author__ = 'ict'
 
-from calculate.cluster import connected_graph
+from calculate.cluster import complete_graph
 
 
 method_set = {
-    "connected graph": connected_graph,
+    "complete graph": complete_graph,
 }
 
 

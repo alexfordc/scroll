@@ -1,12 +1,12 @@
 __author__ = 'ict'
 
+from DAL.driver.base import Base
 
-class RG:
+
+class RG(Base):
     def __init__(self, graph=None):
-        self.data = []
+        Base.__init__(self)
         self.graph = graph
-        self.tag = str(graph)
-        self.loaded = False
 
     def load(self, opt="edge", graph=None):
         if graph is None:
@@ -38,24 +38,5 @@ class RG:
         else:
             raise Exception("invalid option")
 
-    def clean(self):
-        self.data = []
-        self.tag = None
-        self.loaded = False
-
     def save(self, dal_driver):
         pass
-
-    def data(self, index):
-        if index < 0 or index > len(self.data):
-            return None
-        return self.data[index]
-
-    def get_data(self):
-        return self.data
-
-    def get_tag(self):
-        return self.tag
-
-    def done(self):
-        return self.loaded

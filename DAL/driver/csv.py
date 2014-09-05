@@ -2,13 +2,13 @@ __author__ = 'ict'
 
 import os
 
+from DAL.driver.base import Base
 
-class CSV:
+
+class CSV(Base):
     def __init__(self, file=None):
-        self.data = []
+        Base.__init__(self)
         self.file = file
-        self.tag = None
-        self.loaded = False
 
     def load(self, file=None):
         if file is None:
@@ -39,11 +39,6 @@ class CSV:
             self.data.append(tmp_list)
         self.loaded = True
 
-    def clean(self):
-        self.data = []
-        self.tag = None
-        self.loaded = False
-
     def save(self, dal_driver, file=None):
         if file is None:
             file = self.file
@@ -61,17 +56,3 @@ class CSV:
                 for i in range(len(item)):
                     item[i] = str(item[i])
                 csv_fp.write(",".join(item) + "\n")
-
-    def data(self, index):
-        if index < 0 or index > len(self.data):
-            return None
-        return self.data[index]
-
-    def get_data(self):
-        return self.data
-
-    def get_tag(self):
-        return self.tag
-
-    def done(self):
-        return self.loaded
