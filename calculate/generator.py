@@ -35,3 +35,14 @@ def graph_edge(data):
             g.add_node(edge[1])
         g.add_edge(edge)
     return g
+
+
+def graphs_node_set(super, node_set):
+    graphs = []
+    for nodes in node_set:
+        g = Graph()
+        for node in nodes:
+            g.add_node(node)
+        g.complete()
+        graphs.append(g)
+    return graphs

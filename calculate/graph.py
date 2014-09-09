@@ -8,6 +8,8 @@ class Graph:
         self.__node = {}
         self.__edge = {}
         self.__sym = sym
+        self.__comp = False
+        self.__value = 0
 
     def add_node(self, node_id, node_value=0):
         self.__node[node_id] = node_value
@@ -35,6 +37,8 @@ class Graph:
         self.__edge[(node_a, node_b)] = edge_value
 
     def del_edge(self, node_tuple):
+        if self.__comp:
+            self.common()
         if self.__sym:
             if node_tuple[0] > node_tuple[1]:
                 tmp = node_tuple[0]
@@ -47,10 +51,9 @@ class Graph:
     def node_link(self, node):
         link = set()
         for other_node in self.__node:
-            if other_node > node:
-                if (node, other_node) in self.__edge:
-                    link.add(other_node)
-            else:
+            if (node, other_node) in self.__edge:
+                link.add(other_node)
+            if self.__sym:
                 if (other_node, node) in self.__edge:
                     link.add(other_node)
         return link
@@ -63,7 +66,8 @@ class Graph:
             if edge[1] not in links:
                 links[edge[1]] = set()
             links[edge[0]].add(edge[1])
-            links[edge[1]].add(edge[0])
+            if self.__sym:
+                links[edge[1]].add(edge[0])
         return links
 
     def node(self, node_id):
@@ -72,6 +76,8 @@ class Graph:
         return self.__node[node_id]
 
     def edge(self, node_tuple):
+        if self.__comp:
+            return self.__value
         if self.__sym:
             if node_tuple[0] > node_tuple[1]:
                 tmp = node_tuple[0]
@@ -85,10 +91,35 @@ class Graph:
         return self.__node
 
     def get_edge(self):
+        if self.__comp:
+            edges = []
+            for node_a in self.__node:
+                for node_b in self.__node:
+                    if node_a != node_b:
+                        edges.append((node_a, node_b))
+            return edges
+        if self.__sym:
+            reversed_edges = {}
+            for edge, value in self.__edge.items():
+                reversed_edges[(edge[1], edge[0])] = value
+            return dict(self.__edge, **reversed_edges)
         return self.__edge
 
-    def symmetric(self):
+    def is_symmetric(self):
         return self.__sym
+
+    def complete(self, value=0):
+        self.__comp = True
+        self.__value = value
+
+    def common(self):
+        for i_a in range(len(self.__node)):
+            for i_b in range(i_a):
+                self.add_edge((self.__node[i_a], self.__node[i_b]), self.__value)
+        self.__comp = False
+
+    def is_complete(self):
+        return self.__comp
 
     def save(self, file):
         with open(file, "wb") as fp:

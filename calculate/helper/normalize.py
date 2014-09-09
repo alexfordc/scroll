@@ -4,7 +4,7 @@ from calculate.graph import Graph
 
 
 def number_node(graph, base=0):
-    g = Graph(graph.symmetric())
+    g = Graph(graph.is_symmetric())
     nodes = graph.get_node().items()
     edges = graph.get_edge().items()
     mapping = {}
