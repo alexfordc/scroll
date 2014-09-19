@@ -41,11 +41,9 @@ class Graph:
             self.common()
         if self.__sym:
             if node_tuple[0] > node_tuple[1]:
-                tmp = node_tuple[0]
-                node_tuple[0] = node_tuple[1]
-                node_tuple[1] = tmp
+                node_tuple = (node_tuple[1], node_tuple[0])
         if node_tuple not in self.__edge:
-            raise Exception("No such edge: " + str(node_tuple))
+            return
         del self.__edge[node_tuple]
 
     def node_link(self, node):
@@ -80,9 +78,7 @@ class Graph:
             return self.__value
         if self.__sym:
             if node_tuple[0] > node_tuple[1]:
-                tmp = node_tuple[0]
-                node_tuple[0] = node_tuple[1]
-                node_tuple[1] = tmp
+                node_tuple = (node_tuple[1], node_tuple[0])
         if node_tuple not in self.__edge:
             return None
         return self.__edge[node_tuple]
@@ -102,7 +98,9 @@ class Graph:
             reversed_edges = {}
             for edge, value in self.__edge.items():
                 reversed_edges[(edge[1], edge[0])] = value
-            return dict(self.__edge, **reversed_edges)
+            rst_dict = dict(self.__edge)
+            rst_dict.update(reversed_edges)
+            return rst_dict
         return self.__edge
 
     def is_symmetric(self):
@@ -123,7 +121,7 @@ class Graph:
 
     def save(self, file):
         with open(file, "wb") as fp:
-            pickle.dump([self.__node, self.__edge, self.__sym], fp)
+            pickle.dump([self.__node, self.__edge, self.__sym, self.__comp, self.__value], fp)
 
     def load(self, file):
         with open(file, "rb") as fp:
@@ -131,3 +129,5 @@ class Graph:
             self.__node = tmp[0]
             self.__edge = tmp[1]
             self.__sym = tmp[2]
+            self.__comp = tmp[3]
+            self.__value = tmp[4]
