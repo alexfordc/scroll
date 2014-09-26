@@ -12,7 +12,7 @@ def compute(graph):
             if node in node_link:
                 node_link.remove(node)
             tmp_link = set(node_link)
-            for other_node in tmp_link:
+            for other_node in tmp_link.copy():
                 tmp_set.add(other_node)
                 if other_node in node_link:
                     node_link.remove(other_node)

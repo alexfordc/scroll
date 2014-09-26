@@ -57,12 +57,15 @@ class Graph:
         del self.__edge[node_tuple]
         node_a = node_tuple[0]
         node_b = node_tuple[1]
-        if self.__degree[node_a] == 1:
+        self.__degree[node_a] -= 1
+        self.__degree[node_b] -= 1
+        if self.__degree[node_a] == 0:
             del self.__node[node_a]
             del self.__degree[node_a]
-        if self.__degree[node_b] == 1:
-            del self.__node[node_b]
-            del self.__degree[node_b]
+        if node_a != node_b:
+            if self.__degree[node_b] == 0:
+                del self.__node[node_b]
+                del self.__degree[node_b]
 
     def node_link(self, node):
         link = set()
@@ -89,10 +92,10 @@ class Graph:
             for edge in self.__edge:
                 if edge[0] not in links:
                     links[edge[0]] = set()
-                if edge[1] not in links:
-                    links[edge[1]] = set()
                 links[edge[0]].add(edge[1])
                 if self.__sym:
+                    if edge[1] not in links:
+                        links[edge[1]] = set()
                     links[edge[1]].add(edge[0])
         return links
 
