@@ -7,17 +7,25 @@ class Graph:
     def __init__(self, sym=False):
         self.__node = {}
         self.__edge = {}
+        self.__degree = {}
         self.__sym = sym
         self.__comp = False
         self.__value = 0
 
     def add_node(self, node_id, node_value=0):
         self.__node[node_id] = node_value
+        self.__degree[node_id] = 0
 
     def del_node(self, node_id):
+        if self.__comp:
+            self.common()
         for key in self.__node:
             if (node_id, key) in self.__edge:
                 self.del_edge((node_id, key))
+            if (key, node_id) in self.__edge:
+                self.del_edge((key, node_id))
+        del self.__node[node_id]
+        del self.__degree[node_id]
 
     def add_edge(self, node_tuple, edge_value=0):
         missnode = None
@@ -35,6 +43,8 @@ class Graph:
                 node_a = node_b
                 node_b = tmp
         self.__edge[(node_a, node_b)] = edge_value
+        self.__degree[node_a] += 1
+        self.__degree[node_b] += 1
 
     def del_edge(self, node_tuple):
         if self.__comp:
@@ -45,27 +55,45 @@ class Graph:
         if node_tuple not in self.__edge:
             return
         del self.__edge[node_tuple]
+        node_a = node_tuple[0]
+        node_b = node_tuple[1]
+        if self.__degree[node_a] == 1:
+            del self.__node[node_a]
+            del self.__degree[node_a]
+        if self.__degree[node_b] == 1:
+            del self.__node[node_b]
+            del self.__degree[node_b]
 
     def node_link(self, node):
         link = set()
-        for other_node in self.__node:
-            if (node, other_node) in self.__edge:
+        if self.__comp:
+            for other_node in self.__node:
                 link.add(other_node)
-            if self.__sym:
-                if (other_node, node) in self.__edge:
+        else:
+            for other_node in self.__node:
+                if (node, other_node) in self.__edge:
                     link.add(other_node)
+                if self.__sym:
+                    if (other_node, node) in self.__edge:
+                        link.add(other_node)
         return link
 
     def nodes_link(self):
         links = {}
-        for edge in self.__edge:
-            if edge[0] not in links:
-                links[edge[0]] = set()
-            if edge[1] not in links:
-                links[edge[1]] = set()
-            links[edge[0]].add(edge[1])
-            if self.__sym:
-                links[edge[1]].add(edge[0])
+        if self.__comp:
+            for node in self.__node:
+                links[node] = set()
+                for other_node in self.__node:
+                    links[node].add(other_node)
+        else:
+            for edge in self.__edge:
+                if edge[0] not in links:
+                    links[edge[0]] = set()
+                if edge[1] not in links:
+                    links[edge[1]] = set()
+                links[edge[0]].add(edge[1])
+                if self.__sym:
+                    links[edge[1]].add(edge[0])
         return links
 
     def node(self, node_id):
@@ -121,13 +149,14 @@ class Graph:
 
     def save(self, file):
         with open(file, "wb") as fp:
-            pickle.dump([self.__node, self.__edge, self.__sym, self.__comp, self.__value], fp)
+            pickle.dump([self.__node, self.__edge, self.__degree, self.__sym, self.__comp, self.__value], fp)
 
     def load(self, file):
         with open(file, "rb") as fp:
             tmp = pickle.load(fp)
             self.__node = tmp[0]
             self.__edge = tmp[1]
-            self.__sym = tmp[2]
-            self.__comp = tmp[3]
-            self.__value = tmp[4]
+            self.__degree = tmp[2]
+            self.__sym = tmp[3]
+            self.__comp = tmp[4]
+            self.__value = tmp[5]
