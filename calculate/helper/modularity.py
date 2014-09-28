@@ -19,6 +19,7 @@ def value_q(graph, partition_set):
             if v is not None:
                 k[node_i] += v
                 m += v
+    m /= 2
     for node_i in nodes:
         for node_j in nodes:
             if node_i not in c or node_j not in c:
