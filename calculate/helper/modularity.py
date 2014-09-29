@@ -10,7 +10,9 @@ def value_q(graph, partition_set):
     count = 0
     for one_set in partition_set:
         for node in one_set:
-            c[node] = count
+            if node not in c:
+                c[node] = set()
+            c[node].add(count)
         count += 1
     for node_i in nodes:
         k[node_i] = 0
@@ -24,7 +26,7 @@ def value_q(graph, partition_set):
         for node_j in nodes:
             if node_i not in c or node_j not in c:
                 continue
-            if c[node_i] == c[node_j]:
+            if len(c[node_i] & c[node_j]) != 0:
                 a_ij = graph.edge((node_i, node_j))
                 if a_ij is None:
                     a_ij = 0
