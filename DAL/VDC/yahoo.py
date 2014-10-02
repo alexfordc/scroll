@@ -17,6 +17,7 @@ class Yahoo:
         self.data = {}
 
     # data选择有如下几种：
+    #   date     - 日期
     #   open     - 开盘价
     #   high     - 最高价
     #   low      - 最低价
@@ -44,7 +45,12 @@ class Yahoo:
                     for data_elem in data_list:
                         if data_elem not in data_offset:
                             raise Exception("Invalid data option: " + data_elem)
-                        tmp_data[date].append(item[data_offset[data_elem]])
+                        tmp_rst = item[data_offset[data_elem]]
+                        if data_elem in ["open", "high", "low", "close", "adjclose"]:
+                            tmp_rst = float(tmp_rst)
+                        if data_elem == "volume":
+                            tmp_rst = int(tmp_rst)
+                        tmp_data[date].append(tmp_rst)
                 elif len(data_list) == 1:
                     if data_list[0] not in data_offset:
                             raise Exception("Invalid data option: " + data_list[0])
