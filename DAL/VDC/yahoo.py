@@ -1,7 +1,14 @@
 __author__ = 'ict'
 
-date_offset = 0
-price_offset = 6
+data_offset = {
+    "date":     0,
+    "open":     1,
+    "high":     2,
+    "low":      3,
+    "close":    4,
+    "volume":   5,
+    "adjclose": 6,
+}
 
 
 class Yahoo:
@@ -9,13 +16,21 @@ class Yahoo:
         self.drivers = drivers
         self.data = {}
 
-    def create(self, drivers=None):
+    # data选择有如下几种：
+    #   open     - 开盘价
+    #   high     - 最高价
+    #   low      - 最低价
+    #   close    - 收盘价
+    #   volume   - 成交量
+    #   adjclose - 复权价
+    def create(self, drivers=None, data="adjclose"):
         if drivers is None:
             drivers = self.drivers
         if drivers is None:
             raise Exception("Need input a list of drivers")
         date_set = set()
         tmp_dict = {}
+        data_list = data.split(" ")
         for dv in drivers:
             tmp_data = {}
             loaded = True
@@ -23,8 +38,19 @@ class Yahoo:
                 loaded = False
                 dv.load()
             for item in dv.get_data():
-                date = int(item[date_offset])
-                tmp_data[date] = float(item[price_offset])
+                date = int(item[data_offset["date"]])
+                if len(data_list) > 1:
+                    tmp_data[date] = []
+                    for data_elem in data_list:
+                        if data_elem not in data_offset:
+                            raise Exception("Invalid data option: " + data_elem)
+                        tmp_data[date].append(item[data_offset[data_elem]])
+                elif len(data_list) == 1:
+                    if data_list[0] not in data_offset:
+                            raise Exception("Invalid data option: " + data_list[0])
+                    tmp_data[date] = float(item[data_offset[data_list[0]]])
+                else:
+                    raise Exception("At least one data option")
                 date_set.add(date)
             tmp_dict[dv.get_tag()] = tmp_data
             if not loaded:

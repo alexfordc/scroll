@@ -6,7 +6,7 @@ from DAL.driver.csv import CSV
 from DAL.VDC.yahoo import Yahoo
 
 
-def csv(path):
+def csv(path, option):
     if path[-1] != os.path.sep:
         path += os.path.sep
     if not os.path.isdir(path):
@@ -17,5 +17,5 @@ def csv(path):
             continue
         drivers.append(CSV(path + file))
     vdc = Yahoo(drivers)
-    vdc.create()
+    vdc.create(data=option)
     return vdc.get_data()
