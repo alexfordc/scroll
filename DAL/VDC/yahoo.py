@@ -24,14 +24,14 @@ class Yahoo:
     #   close    - 收盘价
     #   volume   - 成交量
     #   adjclose - 复权价
-    def create(self, drivers=None, data="adjclose"):
+    def create(self, drivers=None, option="adjclose"):
         if drivers is None:
             drivers = self.drivers
         if drivers is None:
             raise Exception("Need input a list of drivers")
         date_set = set()
         tmp_dict = {}
-        data_list = data.split(" ")
+        option_list = option.split(" ")
         for dv in drivers:
             tmp_data = {}
             loaded = True
@@ -40,21 +40,21 @@ class Yahoo:
                 dv.load()
             for item in dv.get_data():
                 date = int(item[data_offset["date"]])
-                if len(data_list) > 1:
+                if len(option_list) > 1:
                     tmp_data[date] = []
-                    for data_elem in data_list:
-                        if data_elem not in data_offset:
-                            raise Exception("Invalid data option: " + data_elem)
-                        tmp_rst = item[data_offset[data_elem]]
-                        if data_elem in ["open", "high", "low", "close", "adjclose"]:
+                    for option_elem in option_list:
+                        if option_elem not in data_offset:
+                            raise Exception("Invalid data option: " + option_elem)
+                        tmp_rst = item[data_offset[option_elem]]
+                        if option_elem in ["open", "high", "low", "close", "adjclose"]:
                             tmp_rst = float(tmp_rst)
-                        if data_elem == "volume":
+                        if option_elem == "volume":
                             tmp_rst = int(tmp_rst)
                         tmp_data[date].append(tmp_rst)
-                elif len(data_list) == 1:
-                    if data_list[0] not in data_offset:
-                            raise Exception("Invalid data option: " + data_list[0])
-                    tmp_data[date] = float(item[data_offset[data_list[0]]])
+                elif len(option_list) == 1:
+                    if option_list[0] not in data_offset:
+                            raise Exception("Invalid data option: " + option_list[0])
+                    tmp_data[date] = float(item[data_offset[option_list[0]]])
                 else:
                     raise Exception("At least one data option")
                 date_set.add(date)

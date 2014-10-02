@@ -17,5 +17,5 @@ def csv(path, option):
             continue
         drivers.append(CSV(path + file))
     vdc = Yahoo(drivers)
-    vdc.create(data=option)
+    vdc.create(option=option)
     return vdc.get_data()

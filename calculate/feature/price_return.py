@@ -3,7 +3,7 @@ __author__ = 'ict'
 import math
 
 
-def compute(data_list):
+def compute(data_list, option=None):
     rst = []
     if len(data_list) < 2:
         return data_list
