@@ -37,3 +37,15 @@ def entropy(data_list):
         p = count / len(data_list)
         h -= p * math.log(p)
     return h
+
+
+def normalization(data_list, r_min=0, r_max=1):
+    if len(data_list) == 0:
+        return data_list
+    if r_max <= r_min:
+        raise Exception("Mapping Range max <= min")
+    sub = max(data_list) - min(data_list)
+    r_sub = r_max - r_min
+    if sub == 0:
+        return [r_max] * len(data_list)
+    return [(r_sub / sub) * (x - min(data_list)) for x in data_list]
