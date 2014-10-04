@@ -31,4 +31,6 @@ def value_q(graph, partition_set):
                 if a_ij is None:
                     a_ij = 0
                 q += a_ij - ((k[node_i] * k[node_j]) / (2 * m))
+    if m == 0:
+        return -1
     return q / (2 * m)
