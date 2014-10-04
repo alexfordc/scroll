@@ -48,9 +48,10 @@ class Kline:
                 color = "red"
             else:
                 color = "green"
-            if by1 - by2 == 0:
+            if by1 == by2:
                 by2 += 2
-                color = "yellow"
+                if ly1 == ly2:
+                    color = "yellow"
             can.create_rectangle([bx1, self.height - by1, bx2, self.height - by2], fill=color)
             can.create_line([lx, self.height - ly1, lx, self.height - ly2], fill=color)
         can.pack()
