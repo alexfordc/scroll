@@ -8,13 +8,13 @@ class RG(Base):
         Base.__init__(self)
         self.graph = graph
 
-    def load(self, opt="edge", graph=None):
+    def load(self, option="edge", graph=None):
         if graph is None:
             graph = self.graph
         if graph is None:
             raise Exception("Need input a graph")
         self.tag = str(graph)
-        opt_multi = opt.split(" ")
+        opt_multi = option.split(" ")
         if len(opt_multi) == 0:
             raise Exception("Need input options")
         if opt_multi[0] == "node":
