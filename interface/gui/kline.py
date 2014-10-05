@@ -62,16 +62,27 @@ class Kline:
         text_y = self.top_offset
         self.price.sort(reverse=True)
         for i in range(len(self.price)):
-            can.create_text([self.side_offset / 2, text_y], text=str(self.price[i])[:7], fill="red")
+            price_str = str(self.price[i])
+            can.create_text([self.side_offset / 2, text_y], text=price_str[:price_str.find(".") + 3], fill="red")
             if i < len(self.price) - 1:
                 can.create_line([side_x1, text_y, side_x2, text_y], fill="red", dash=1)
             else:
                 can.create_line([side_x1, text_y, side_x2, text_y], fill="red")
             text_y += step_y
         text_y -= step_y - self.buttom_offset
+        vl = [self.vma, (self.vma + self.vmi) / 2, self.vmi]
+        for i in range(len(vl)):
+            if vl[i] > 9999999:
+                vl[i] = str(int(vl[i] / 1000)) + "k"
+            else:
+                vl[i] = str(vl[i])
+        can.create_text([self.side_offset / 2, text_y], text=str(vl[0]), fill="red")
         can.create_line([side_x1, text_y, side_x2, text_y], fill="red", dash=1)
         text_y += self.vgraph_height / 2
+        can.create_text([self.side_offset / 2, text_y], text=str(vl[1]), fill="red")
         can.create_line([side_x1, text_y, side_x2, text_y], fill="red", dash=1)
+        text_y += self.vgraph_height / 2
+        can.create_text([self.side_offset / 2, text_y], text=str(vl[2]), fill="red")
         for b in self.block:
             bx1 = b[x_offset]
             bx2 = bx1 + self.block_width - 1
@@ -89,15 +100,16 @@ class Kline:
                 if ly1 == ly2:
                     color = "yellow"
             can.create_line([lx, ly1, lx, ly2], fill=color)
+            vy = b[volume_y]
+            if self.height - self.buttom_offset - 1 - vy < 2:
+                vy -= self.height - self.buttom_offset + 1
             if color == "red":
                 can.create_rectangle([bx1, by1, bx2, by2], outline=color, fill="black")
                 if self.have_volume:
-                    vy = b[volume_y]
                     can.create_rectangle([bx1, vy, bx2, self.height - self.buttom_offset - 1], outline=color, fill="black")
             else:
                 can.create_rectangle([bx1, by1, bx2, by2], fill=color)
                 if self.have_volume:
-                    vy = b[volume_y]
                     if color != "yellow":
                         can.create_rectangle([bx1, vy, bx2, self.height - self.buttom_offset - 1], fill=color)
         for curve_class in self.curve:
