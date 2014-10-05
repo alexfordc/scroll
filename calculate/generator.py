@@ -6,7 +6,7 @@ import calculate.similarity.core
 from calculate.graph import Graph
 
 
-def graph_network(data, ft_mtd, sim_mtd):
+def graph_relation(data, ft_mtd, sim_mtd):
     g = Graph(True)
     data_list = list(data.items())
     ft_dict = {}

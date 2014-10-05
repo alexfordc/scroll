@@ -1,7 +1,6 @@
+from calculate.cluster.graph import complete_graph
+
 __author__ = 'ict'
-
-from calculate.cluster import complete_graph
-
 
 method_set = {
     "complete graph": complete_graph,
