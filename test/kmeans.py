@@ -1,6 +1,6 @@
 __author__ = 'ict'
 
-from calculate.cluster.kmeans import kmeans
+from calculate.cluster.kmeans import *
 
 data = {
     1: [1, 1],
@@ -21,4 +21,5 @@ data = {
     16: [5, 5],
 }
 
-print(kmeans(data, 5))
+print("kmeans: ", kmeans(data, 4))
+print("bikmeans: ", bikmeans(data, 4))

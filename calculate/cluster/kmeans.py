@@ -4,7 +4,62 @@ import random
 from calculate.distance.core import method
 
 
-def kmeans(data_dict, k, distance="euclid"):
+def kmeans(data_dict, k, distance="euclid", seed=None):
+    cluster = {}
+    c_cluster = {}
+    dim = None
+    if seed is not None:
+        seed_set = set(seed)
+    else:
+        seed_set = set(data_dict)
+    for i in range(k):
+        choose = random.choice(list(seed_set))
+        seed_set.remove(choose)
+        c_cluster[i] = data_dict[choose]
+    for key, data in data_dict.items():
+        min_dist = float("inf")
+        dim = len(data)
+        nearest = None
+        for i in range(k):
+            dist = method(distance, data, c_cluster[i])
+            if dist < min_dist:
+                min_dist = dist
+                nearest = i
+        if nearest not in cluster:
+            cluster[nearest] = []
+        cluster[nearest].append(key)
+    change = True
+    while change:
+        change = False
+        for i in range(k):
+            c_cluster[i] = [0] * dim
+            for key in cluster[i]:
+                for j in range(dim):
+                    c_cluster[i][j] += data_dict[key][j]
+            c_cluster[i] = [c_cluster[i][_i] / len(cluster[i]) for _i in range(dim)]
+        _cluster = {}
+        for key, data in data_dict.items():
+            min_dist = float("inf")
+            dim = len(data)
+            nearest = None
+            for i in range(k):
+                dist = method(distance, data, c_cluster[i])
+                if dist < min_dist:
+                    min_dist = dist
+                    nearest = i
+            if nearest not in _cluster:
+                _cluster[nearest] = []
+            _cluster[nearest].append(key)
+        if _cluster != cluster:
+            change = True
+        cluster = _cluster
+    rst = set()
+    for _, cls in cluster.items():
+        rst.add(frozenset(cls))
+    return rst
+
+
+def bikmeans(data_dict, k, distance="euclid"):
     cluster = [[]]
     cluster_center = {}
     c_cluster0 = None
