@@ -2,7 +2,7 @@ __author__ = 'ict'
 
 from calculate.classify.KNN import KNN
 
-# 创建k近邻学习器
+# 创建k近邻学习器，使用欧几里得距离。
 knn = KNN("euclid")
 
 # 训练样本和k值
