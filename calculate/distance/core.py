@@ -1,9 +1,11 @@
 __author__ = 'ict'
 
 from calculate.distance import euclid
+from calculate.distance import manhattan
 
 method_set = {
     "euclid": euclid,
+    "manhattan": manhattan,
 }
 
 
