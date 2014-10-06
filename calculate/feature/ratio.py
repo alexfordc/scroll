@@ -1,7 +1,7 @@
 __author__ = 'ict'
 
 
-def compute(data_list, option=None):
+def compute(data_list):
     rst = []
     if len(data_list) < 2:
         return data_list
