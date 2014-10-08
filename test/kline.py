@@ -2,7 +2,7 @@ __author__ = 'ict'
 
 import DAL.yahoo
 from interface.gui.kline import Kline
-from calculate.helper.MAC import ma
+from calculate.helper.stock import ma
 
 # 读取yahoo股票数据到data变量
 data = DAL.yahoo.csv(r"e:\stockdata", "open high low close volume")
