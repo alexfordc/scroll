@@ -1,9 +1,14 @@
 __author__ = 'ict'
 
-# MA crossover
+from calculate.helper.stock import ma
 
 
-def mac(data_list, x, y, offset=0):
+def compute(data_list, option):
+    x = option[0]
+    y = option[1]
+    offset = 0
+    if len(option) > 2:
+        offset = option[2]
     if x >= y:
         raise Exception("x must less than y")
     ma_x = [0] * (y - offset + 1) + ma(data_list, x, offset, start=y)
@@ -15,12 +20,3 @@ def mac(data_list, x, y, offset=0):
         if ma_x[i - 1] > ma_y[i - 1] and ma_x[i] < ma_y[i]:
             rst[i] = -1
     return rst
-
-
-def ma(data_list, w, offset=0, start=-1):
-    if start == -1:
-        start = w
-    ma_list = []
-    for i in range(start - offset, len(data_list) - offset):
-        ma_list.append(sum(data_list[i - w + 1 + offset: i + 1 + offset]) / w)
-    return ma_list

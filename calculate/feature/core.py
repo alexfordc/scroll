@@ -1,9 +1,8 @@
-from calculate.helper import MAC
-
 __author__ = 'ict'
 
 from calculate.feature import price_return
 from calculate.feature import ratio
+from calculate.feature import MA_cross
 
 callback_index = 0
 option_indx = 1
@@ -11,6 +10,7 @@ option_indx = 1
 method_set = {
     "price return": (price_return, False),
     "ratio": (ratio, False),
+    "MA cross": (MA_cross, True),
 }
 
 
