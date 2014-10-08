@@ -163,3 +163,16 @@ class Graph:
             self.__sym = tmp[3]
             self.__comp = tmp[4]
             self.__value = tmp[5]
+
+    def set(self, node, edge, degree, sym, comp, value):
+        self.__node = node.copy()
+        self.__edge = edge.copy()
+        self.__degree = degree.copy()
+        self.__sym = sym
+        self.__comp = comp
+        self.__value = value
+
+    def copy(self):
+        g = Graph()
+        g.set(self.__node, self.__edge, self.__degree, self.__sym, self.__comp, self.__value)
+        return g
