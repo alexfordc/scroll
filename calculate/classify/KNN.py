@@ -6,12 +6,12 @@ import calculate.distance.core
 class KNN:
     def __init__(self, distance="euclid", option=None):
         self.sample = []
-        self.distance = distance
+        self.distance = calculate.distance.core.get_function(distance)
         self.option = option
         self.k = 0
 
     def distance(self, distance="euclid", option=None):
-        self.distance = distance
+        self.distance = calculate.distance.core.get_function(distance)
         self.option = option
 
     def train(self, data, label, k):
@@ -32,9 +32,9 @@ class KNN:
             d = []
             for samp in self.sample:
                 if self.option is not None:
-                    d.append((calculate.distance.core.method(self.distance, one_data, samp[0], self.option), samp[1]))
+                    d.append((self.distance(one_data, samp[0], self.option), samp[1]))
                 else:
-                    d.append((calculate.distance.core.method(self.distance, one_data, samp[0]), samp[1]))
+                    d.append((self.distance(one_data, samp[0]), samp[1]))
             d.sort()
             if self.k < len(d):
                 dknn = d[:self.k]

@@ -51,7 +51,7 @@ def method(mtd, data_a, data_b, option=None):
 def get_function(mtd):
     if mtd not in method_set:
         raise Exception("No such cluster method: " + str(mtd))
-    return method_set[mtd][callback_index]
+    return method_set[mtd][callback_index].compute
 
 
 def names():

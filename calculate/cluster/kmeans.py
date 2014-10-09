@@ -1,13 +1,14 @@
 __author__ = 'ict'
 
 import random
-from calculate.distance.core import method
+import calculate.distance.core
 
 
 def kmeans(data_dict, k, distance="euclid", seed=None):
     cluster = {}
     c_cluster = {}
     dim = None
+    distance_function = calculate.distance.core.get_function(distance)
     if seed is not None:
         seed_set = set(seed)
     else:
@@ -21,7 +22,7 @@ def kmeans(data_dict, k, distance="euclid", seed=None):
         dim = len(data)
         nearest = None
         for i in range(k):
-            dist = method(distance, data, c_cluster[i])
+            dist = distance_function(data, c_cluster[i])
             if dist < min_dist:
                 min_dist = dist
                 nearest = i
@@ -43,7 +44,7 @@ def kmeans(data_dict, k, distance="euclid", seed=None):
             dim = len(data)
             nearest = None
             for i in range(k):
-                dist = method(distance, data, c_cluster[i])
+                dist = distance_function(data, c_cluster[i])
                 if dist < min_dist:
                     min_dist = dist
                     nearest = i
@@ -64,6 +65,7 @@ def bikmeans(data_dict, k, distance="euclid"):
     cluster_center = {}
     c_cluster0 = None
     dim = None
+    distance_function = calculate.distance.core.get_function(distance)
     for _, data in data_dict.items():
         if c_cluster0 is None:
             c_cluster0 = data
@@ -93,7 +95,7 @@ def bikmeans(data_dict, k, distance="euclid"):
             cluster_a = []
             cluster_b = []
             for key in cluster[i]:
-                if method(distance, data_dict[key], c_a) < method(distance, data_dict[key], c_b):
+                if distance_function(data_dict[key], c_a) < distance_function(data_dict[key], c_b):
                     cluster_a.append(key)
                 else:
                     cluster_b.append(key)
@@ -113,7 +115,7 @@ def bikmeans(data_dict, k, distance="euclid"):
                 _cluster_a = []
                 _cluster_b = []
                 for key in cluster[i]:
-                    if method(distance, data_dict[key], c_a) < method(distance, data_dict[key], c_b):
+                    if distance_function(data_dict[key], c_a) < distance_function(data_dict[key], c_b):
                         _cluster_a.append(key)
                     else:
                         _cluster_b.append(key)
@@ -127,11 +129,11 @@ def bikmeans(data_dict, k, distance="euclid"):
             sse_split = 0
             see_nosplit = 0
             for key in cluster_a:
-                sse_split += method(distance, data_dict[key], c_a) ** 2
+                sse_split += distance_function(data_dict[key], c_a) ** 2
             for key in cluster_b:
-                sse_split += method(distance, data_dict[key], c_b) ** 2
+                sse_split += distance_function(data_dict[key], c_b) ** 2
             for key in cluster[i]:
-                see_nosplit += method(distance, data_dict[key], cluster_center[i]) ** 2
+                see_nosplit += distance_function(data_dict[key], cluster_center[i]) ** 2
             if see_nosplit - sse_split > delta_sse:
                 delta_sse = see_nosplit - sse_split
                 min_sse_cluster = tmp_cluster
