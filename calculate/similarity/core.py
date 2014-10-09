@@ -11,14 +11,35 @@ method_set = {
 
 
 def method(mtd, data_a, data_b, option=None):
-    if mtd not in method_set:
-        raise Exception("No such similarity mothod")
     if len(data_a) != len(data_b):
         raise Exception("Two vecter must have same dimension")
-    if method_set[mtd][option_indx]:
-        return method_set[mtd][callback_index].compute(data_a, data_b, option)
+    mtd_list = mtd.split(",")
+    for i in range(len(mtd_list)):
+        while True:
+            if len(mtd_list[i]) == 0:
+                raise Exception("Miss method")
+            if mtd_list[i][0] == " ":
+                mtd_list[i] = mtd_list[i][1:]
+            if mtd_list[i][-1] == " ":
+                mtd_list[i] = mtd_list[i][:-1]
+            if mtd_list[i][0] != " " and mtd_list[i][-1] != " ":
+                break
+    if len(mtd_list) == 1:
+        option = [option]
+    if option is None:
+        option = [None] * len(mtd_list)
+    rst = []
+    for i in range(len(mtd_list)):
+        if mtd_list[i] not in method_set:
+            raise Exception("No such similarity mothod: " + mtd_list[i])
+        if method_set[mtd_list[i]][option_indx] and option[i] is not None:
+            rst.append(method_set[mtd_list[i]][callback_index].compute(data_a, data_b, option[i]))
+        else:
+            rst.append(method_set[mtd_list[i]][callback_index].compute(data_a, data_b))
+    if len(rst) == 1:
+        return rst[0]
     else:
-        return method_set[mtd][callback_index].compute(data_a, data_b)
+        return rst
 
 
 def names():
