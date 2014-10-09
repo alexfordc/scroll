@@ -16,11 +16,11 @@ method_set = {
 }
 
 
-def method(mtd, data_list, option=None):
+def method(mtd, data_list, option=None, main=0):
     single_data_list = None
     if isinstance(data_list[0], list):
         multidata = True
-        single_data_list = [data[0] for data in data_list]
+        single_data_list = [data[main] for data in data_list]
     else:
         multidata = False
     mtd_list = mtd.split(",")
