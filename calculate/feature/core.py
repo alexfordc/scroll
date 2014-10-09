@@ -33,7 +33,7 @@ def method(mtd, data_list, option=None):
     rst = []
     for i in range(len(mtd_list)):
         if mtd_list[i] not in method_set:
-            raise Exception("No such feature mothod: " + mtd)
+            raise Exception("No such feature mothod: " + str(mtd_list[i]))
         if method_set[mtd_list[i]][option_indx] and option[i] is not None:
             rst.append(method_set[mtd_list[i]][callback_index].compute(data_list, option[i]))
         else:
@@ -42,6 +42,12 @@ def method(mtd, data_list, option=None):
         return rst[0]
     else:
         return rst
+
+
+def get_function(mtd):
+    if mtd not in method_set:
+        raise Exception("No such cluster method: " + str(mtd))
+    return method_set[mtd][callback_index]
 
 
 def names():
