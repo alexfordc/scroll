@@ -3,6 +3,8 @@ __author__ = 'ict'
 from calculate.feature import price_return
 from calculate.feature import ratio
 from calculate.feature import MA_cross
+from calculate.feature import MA
+from calculate.feature import RSV
 
 callback_index = 0
 option_indx = 1
@@ -13,6 +15,8 @@ method_set = {
     "price return": (price_return, False, False),
     "ratio": (ratio, False, False),
     "MA cross": (MA_cross, True, False),
+    "MA": (MA, True, False),
+    "RSV": (RSV, True, True),
 }
 
 
@@ -46,7 +50,7 @@ def method(mtd, data_list, option=None, main=None):
             if multidata:
                 if main[i] is None:
                     if not method_set[mtd_list[i]][multidata_index]:
-                        raise Exception("Need give main data index for a non-mulidata method")
+                        raise Exception("Need give main data index for a non-mulidata method: " + str(mtd_list[i]))
                     single_data_list.append(None)
                 else:
                     single_data_list.append([data[main[i]] for data in data_list])
@@ -61,7 +65,7 @@ def method(mtd, data_list, option=None, main=None):
         else:
             _data_list = data_list
         if method_set[mtd_list[i]][option_indx] and option[i] is not None:
-            rst.append(method_set[mtd_list[i]][callback_index].compute(_data_list, option[i]))
+            rst.append(method_set[mtd_list[i]][callback_index].compute(_data_list, **option[i]))
         else:
             rst.append(method_set[mtd_list[i]][callback_index].compute(_data_list))
     if len(rst) == 1:

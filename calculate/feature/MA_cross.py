@@ -1,18 +1,17 @@
 __author__ = 'ict'
 
-from calculate.helper.stock import ma
+import calculate.feature.MA
+
+x_index = 0
+y_index = 1
+offset_index = 2
 
 
-def compute(data_list, option):
-    x = option[0]
-    y = option[1]
-    offset = 0
-    if len(option) > 2:
-        offset = option[2]
+def compute(data_list, x, y, offset=0):
     if x >= y:
         raise Exception("x must less than y")
-    ma_x = [0] * (y - offset + 1) + ma(data_list, x, offset, start=y)
-    ma_y = [0] * (y - offset + 1) + ma(data_list, y, offset, start=y)
+    ma_x = [0] * (y - offset + 1) + calculate.feature.MA.compute(data_list, x, offset, start=y)
+    ma_y = [0] * (y - offset + 1) + calculate.feature.MA.compute(data_list, y, offset, start=y)
     rst = [0] * len(data_list)
     for i in range(y - offset + 1, len(data_list) - offset):
         if ma_x[i - 1] < ma_y[i - 1] and ma_x[i] > ma_y[i]:
