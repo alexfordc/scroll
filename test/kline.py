@@ -2,7 +2,7 @@ __author__ = 'ict'
 
 import DAL.yahoo
 from interface.gui.kline import Kline
-from calculate.helper.stock import ma
+import calculate.feature.core
 
 # 读取yahoo股票数据到data变量
 data = DAL.yahoo.csv(r"e:\stockdata", "open high low close volume")
@@ -18,6 +18,9 @@ k = Kline(1800, 900)
 
 # 创建基本k线图
 k.create_basic(d)
+
+# 获得计算MA的函数
+ma = calculate.feature.core.get_function("MA")
 
 # 分别计算5、10、30天的MA值
 ma5 = ma(dclose, 5)
