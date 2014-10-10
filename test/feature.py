@@ -9,7 +9,7 @@ import calculate.feature.core
 data = DAL.yahoo.csv(r"e:\stockdata", "open high low close adjclose")
 
 # 选择要计算的所有特征名称
-mtd_str = "MA, MA cross, price return, ratio, RSV"
+mtd_str = "MA, MA cross, price return, ratio, RSV, JDK"
 
 # 针对每个特征计算方法的参数
 option = [
@@ -27,11 +27,16 @@ option = [
     {
         "n": 10,
         "ohlc": (0, 1, 2, 3),
+    },
+    {
+        "n": 10,
+        "m": 3,
+        "m1": 3,
     }
 ]
 
 # 所有非multidata的方法的main值
-main = [4, 4, 4, 4, None]
+main = [4, 4, 4, 4, None, None]
 
 # 计算每个数据的所有特征并打印
 for key, value in data.items():

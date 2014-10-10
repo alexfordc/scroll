@@ -5,6 +5,7 @@ from calculate.feature import ratio
 from calculate.feature import MA_cross
 from calculate.feature import MA
 from calculate.feature import RSV
+from calculate.feature import JDK
 
 callback_index = 0
 option_indx = 1
@@ -17,6 +18,7 @@ method_set = {
     "MA cross": (MA_cross, True, False),
     "MA": (MA, True, False),
     "RSV": (RSV, True, True),
+    "JDK": (JDK, True, True),
 }
 
 
@@ -42,6 +44,8 @@ def method(mtd, data_list, option=None, main=None):
     if option is None:
         option = [None] * len(mtd_list)
     for i in range(len(mtd_list)):
+        if mtd_list[i] not in method_set:
+            raise Exception("No such feature method: " + str(mtd_list[i]))
         if main is None:
             if multidata and not method_set[mtd_list[i]][multidata_index]:
                 raise Exception("Need give main data index when input multidata")
@@ -56,8 +60,6 @@ def method(mtd, data_list, option=None, main=None):
                     single_data_list.append([data[main[i]] for data in data_list])
     rst = []
     for i in range(len(mtd_list)):
-        if mtd_list[i] not in method_set:
-            raise Exception("No such feature method: " + str(mtd_list[i]))
         if not multidata and method_set[mtd_list[i]][multidata_index]:
             raise Exception("This method need multidata: " + str(mtd_list[i]))
         if multidata and not method_set[mtd_list[i]][multidata_index]:
