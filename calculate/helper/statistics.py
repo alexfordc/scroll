@@ -39,6 +39,21 @@ def entropy(data_list):
     return h
 
 
+def gini(data_list):
+    if len(data_list) == 0:
+        return 0
+    elem_dict = {}
+    for data in data_list:
+        if data not in elem_dict:
+            elem_dict[data] = 0
+        elem_dict[data] += 1
+    g = 1
+    for _, count in elem_dict.items():
+        p = count / len(data_list)
+        g -= p ** 2
+    return g
+
+
 def normalization(data_list, r_min=0, r_max=1):
     if len(data_list) == 0:
         return data_list
