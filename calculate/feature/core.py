@@ -8,7 +8,7 @@ callback_index = 0
 option_indx = 1
 multidata_index = 2
 
-# (callback, have index, multidata)
+# (callback, have option, multidata)
 method_set = {
     "price return": (price_return, False, False),
     "ratio": (ratio, False, False),
@@ -16,11 +16,10 @@ method_set = {
 }
 
 
-def method(mtd, data_list, option=None, main=0):
-    single_data_list = None
+def method(mtd, data_list, option=None, main=None):
+    single_data_list = []
     if isinstance(data_list[0], list):
         multidata = True
-        single_data_list = [data[main] for data in data_list]
     else:
         multidata = False
     mtd_list = mtd.split(",")
@@ -38,6 +37,19 @@ def method(mtd, data_list, option=None, main=0):
         option = [option]
     if option is None:
         option = [None] * len(mtd_list)
+    for i in range(len(mtd_list)):
+        if main is None:
+            if multidata and not method_set[mtd_list[i]][multidata_index]:
+                raise Exception("Need give main data index when input multidata")
+            single_data_list.append(None)
+        else:
+            if multidata:
+                if main[i] is None:
+                    if not method_set[mtd_list[i]][multidata_index]:
+                        raise Exception("Need give main data index for a non-mulidata method")
+                    single_data_list.append(None)
+                else:
+                    single_data_list.append([data[main[i]] for data in data_list])
     rst = []
     for i in range(len(mtd_list)):
         if mtd_list[i] not in method_set:
@@ -45,7 +57,7 @@ def method(mtd, data_list, option=None, main=0):
         if not multidata and method_set[mtd_list[i]][multidata_index]:
             raise Exception("This method need multidata: " + str(mtd_list[i]))
         if multidata and not method_set[mtd_list[i]][multidata_index]:
-            _data_list = single_data_list
+            _data_list = single_data_list[i]
         else:
             _data_list = data_list
         if method_set[mtd_list[i]][option_indx] and option[i] is not None:
