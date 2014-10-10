@@ -65,7 +65,10 @@ def method(mtd, data_list, option=None, main=None):
         else:
             _data_list = data_list
         if method_set[mtd_list[i]][option_indx] and option[i] is not None:
-            rst.append(method_set[mtd_list[i]][callback_index].compute(_data_list, **option[i]))
+            if isinstance(option[i], dict):
+                rst.append(method_set[mtd_list[i]][callback_index].compute(_data_list, **option[i]))
+            else:
+                rst.append(method_set[mtd_list[i]][callback_index].compute(_data_list, option[i]))
         else:
             rst.append(method_set[mtd_list[i]][callback_index].compute(_data_list))
     if len(rst) == 1:

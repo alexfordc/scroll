@@ -31,7 +31,10 @@ def method(mtd, graph, option=None):
         if mtd_list[i] not in method_set:
             raise Exception("No such cluster method: " + str(mtd_list[i]))
         if method_set[mtd_list[i]][option_indx] and option[i] is not None:
-            rst.append(method_set[mtd_list[i]][callback_index].compute(graph, option[i]))
+            if isinstance(option[i], dict):
+                rst.append(method_set[mtd_list[i]][callback_index].compute(graph, **option[i]))
+            else:
+                rst.append(method_set[mtd_list[i]][callback_index].compute(graph, option[i]))
         else:
             rst.append(method_set[mtd_list[i]][callback_index].compute(graph))
     if len(rst) == 1:

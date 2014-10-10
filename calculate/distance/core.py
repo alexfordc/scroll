@@ -39,7 +39,10 @@ def method(mtd, data_a, data_b, option=None):
         if mtd_list[i] not in method_set:
             raise Exception("No such distance mothod: " + str(mtd_list[i]))
         if method_set[mtd_list[i]][option_indx] and option[i] is not None:
-            rst.append(method_set[mtd_list[i]][callback_index].compute(data_a, data_b, option[i]))
+            if isinstance(option[i], dict):
+                rst.append(method_set[mtd_list[i]][callback_index].compute(data_a, data_b, **option[i]))
+            else:
+                rst.append(method_set[mtd_list[i]][callback_index].compute(data_a, data_b, option[i]))
         else:
             rst.append(method_set[mtd_list[i]][callback_index].compute(data_a, data_b))
     if len(rst) == 1:
