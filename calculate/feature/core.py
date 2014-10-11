@@ -5,7 +5,7 @@ from calculate.feature import ratio
 from calculate.feature import MA_cross
 from calculate.feature import MA
 from calculate.feature import RSV
-from calculate.feature import JDK
+from calculate.feature import KDJ
 
 callback_index = 0
 option_indx = 1
@@ -18,7 +18,7 @@ method_set = {
     "MA cross": (MA_cross, True, False),
     "MA": (MA, True, False),
     "RSV": (RSV, True, True),
-    "JDK": (JDK, True, True),
+    "KDJ": (KDJ, True, True),
 }
 
 
