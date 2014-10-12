@@ -6,6 +6,9 @@ from calculate.feature import MA_cross
 from calculate.feature import MA
 from calculate.feature import RSV
 from calculate.feature import KDJ
+from calculate.feature import EMA
+from calculate.feature import MACD
+from calculate.feature import SMA
 
 callback_index = 0
 option_indx = 1
@@ -19,6 +22,9 @@ method_set = {
     "MA": (MA, True, False),
     "RSV": (RSV, True, True),
     "KDJ": (KDJ, True, True),
+    "EMA": (EMA, True, False),
+    "MACD": (MACD, True, False),
+    "SMA": (SMA, True, False),
 }
 
 
