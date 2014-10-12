@@ -3,7 +3,7 @@ __author__ = 'ict'
 from calculate.similarity import cos
 
 callback_index = 0
-option_indx = 1
+option_index = 1
 
 method_set = {
     "cos": (cos, False),
@@ -32,7 +32,7 @@ def method(mtd, data_a, data_b, option=None):
     for i in range(len(mtd_list)):
         if mtd_list[i] not in method_set:
             raise Exception("No such similarity mothod: " + mtd_list[i])
-        if method_set[mtd_list[i]][option_indx] and option[i] is not None:
+        if method_set[mtd_list[i]][option_index] and option[i] is not None:
             if isinstance(option[i], dict):
                 rst.append(method_set[mtd_list[i]][callback_index].compute(data_a, data_b, **option[i]))
             else:
