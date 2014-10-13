@@ -1,6 +1,7 @@
 __author__ = 'ict'
 
 from calculate.helper.statistics import variance
+import math
 
 
 def importance(data_dict):
@@ -10,4 +11,4 @@ def importance(data_dict):
     for i in range(len(tmp[1])):
         weight_list.append(variance([value[i] for _, value in data_dict.items()]))
     for key, value in data_dict.items():
-        data_dict[key] = [weight_list[i] * value[i] for i in range(len(tmp[1]))]
+        data_dict[key] = [math.sqrt(weight_list[i]) * value[i] for i in range(len(tmp[1]))]
