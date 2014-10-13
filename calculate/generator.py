@@ -2,16 +2,19 @@ __author__ = 'ict'
 
 import calculate.feature.core
 import calculate.similarity.core
+import calculate.helper.importance
 
 from calculate.graph import Graph
 
 
-def graph_relation(data, ft_mtd, sim_mtd):
+def graph_relation(data, ft_mtd, sim_mtd, importance=False):
     g = Graph(True)
     data_list = list(data.items())
     ft_dict = {}
     for key, odata in data_list:
         ft_dict[key] = calculate.feature.core.method(ft_mtd, odata)
+    if importance:
+        calculate.helper.importance.importance(ft_dict)
     for i in range(len(data_list)):
         for j in range(i + 1):
             id_a = data_list[i][0]

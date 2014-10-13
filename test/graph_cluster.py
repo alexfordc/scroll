@@ -11,7 +11,7 @@ import calculate.helper.threshold  # 阈值化处理的相关函数
 data = DAL.yahoo.csv(r"e:\stockdata", "adjclose")
 
 # 使用生成器以“price return”为特征，用余弦（cos）相似度进行网络构建。
-g = calculate.generator.graph_relation(data, "price return", "cos")
+g = calculate.generator.graph_relation(data, "price return", "cos", True)
 
 # 按照0.75的下限阈值和0.99的上限阈值进行处理
 calculate.helper.threshold.edge_thr(g, 0.75)
