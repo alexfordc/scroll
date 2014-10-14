@@ -31,8 +31,17 @@ class CSV(Base):
             item_list = item.split(",")
             tmp_list = []
             for each in item_list:
+                while True:
+                    if len(each) == 0:
+                        break
+                    if each[0] == " ":
+                        each = each[1:]
+                    if each[-1] == " ":
+                        each = each[:-1]
+                    if each[0] != " " and each[-1] != " ":
+                        break
                 if len(each) != 0:
-                    if each[0] == "\"" and each[-1] == "\'":
+                    if each[0] == "\"" and each[-1] == "\"":
                         tmp_list.append(each[1:-1])
                     else:
                         tmp_list.append(each)
