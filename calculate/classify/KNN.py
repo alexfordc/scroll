@@ -4,21 +4,16 @@ import calculate.distance.core
 
 
 class KNN:
-    def __init__(self, distance="euclid", option=None):
+    def __init__(self, k, distance="euclid", option=None):
         self.sample = []
         self.distance = calculate.distance.core.get_function(distance)
         self.option = option
-        self.k = 0
+        self.k = k
 
-    def distance(self, distance="euclid", option=None):
-        self.distance = calculate.distance.core.get_function(distance)
-        self.option = option
-
-    def train(self, data, label, k):
+    def train(self, data, label):
         if len(data) != len(label):
             raise Exception("data and label must have same dimension")
         self.sample = [(data[i], label[i]) for i in range(len(data))]
-        self.k = k
 
     def classify(self, data):
         if len(data) == 0:
