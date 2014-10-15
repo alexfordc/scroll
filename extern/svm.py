@@ -13,7 +13,10 @@ try:
         elif platform.architecture()[0] == "64bit":
             libsvm = CDLL(path.join(dirname, r'..\lib\libsvm_x64.dll'))
     else:
-        libsvm = CDLL(path.join(dirname, '../lib/libsvm.so.2'))
+        if platform.architecture()[0] == "linux":
+            libsvm = CDLL(path.join(dirname, '../lib/libsvm_linux.so.2'))
+        else:
+            libsvm = CDLL(path.join(dirname, '../lib/libsvm_macos.so.2'))
 except:
     # For unix the prefix 'lib' is not considered.
     if find_library('svm'):
