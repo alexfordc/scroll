@@ -7,4 +7,4 @@ def compute(data_list):
         return data_list
     for i in range(len(data_list) - 1):
         rst.append(data_list[i + 1] / data_list[i] - 1)
-    return rst
+    return [0] + rst

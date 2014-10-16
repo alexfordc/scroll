@@ -9,7 +9,7 @@ import calculate.feature.core
 data = DAL.yahoo.csv(r"e:\stockdata", "open high low close adjclose")
 
 # 选择要计算的所有特征名称
-mtd_str = "MA, MA cross, price return, ratio, RSV, KDJ, EMA, MACD, SMA"
+mtd_str = "MA, MA cross, price return, change rate, RSV, KDJ, EMA, MACD, SMA"
 
 # 针对每个特征计算方法的参数
 option = [

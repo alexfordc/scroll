@@ -28,9 +28,9 @@ ma10 = ma(dclose, 10)
 ma30 = ma(dclose, 30)
 
 # 将MA值添加到k线图中
-k.create_curve(ma5, "white", offset=5, price=True)
-k.create_curve(ma10, "blue", offset=10, price=True)
-k.create_curve(ma30, "purple", offset=30, price=True)
+k.create_curve(ma5, "white", price=True)
+k.create_curve(ma10, "blue", price=True)
+k.create_curve(ma30, "purple", price=True)
 
 # 绘制k线图并以展示出来
 k.draw()

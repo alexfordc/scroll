@@ -1,7 +1,7 @@
 __author__ = 'ict'
 
 from calculate.feature import price_return
-from calculate.feature import ratio
+from calculate.feature import change_rate
 from calculate.feature import MA_cross
 from calculate.feature import MA
 from calculate.feature import RSV
@@ -17,7 +17,7 @@ multidata_index = 2
 # (callback, have option, multidata)
 method_set = {
     "price return": (price_return, False, False),
-    "ratio": (ratio, False, False),
+    "change rate": (change_rate, False, False),
     "MA cross": (MA_cross, True, False),
     "MA": (MA, True, False),
     "RSV": (RSV, True, True),
