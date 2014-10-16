@@ -6,7 +6,7 @@ import pickle
 def save(var, filename):
     try:
         fp = open(filename, "wb")
-        pickle.dumps(var, fp)
+        pickle.dump(var, fp)
     except:
         raise Exception("Can not open file: " + filename)
 

@@ -1,10 +1,11 @@
 __author__ = 'ict'
 
+import DAL.file
 import calculate.distance.core
 
 
 class KNN:
-    def __init__(self, k, distance="euclid", option=None):
+    def __init__(self, k=1, distance="euclid", option=None):
         self.sample = []
         self.distance = calculate.distance.core.get_function(distance)
         self.option = option
@@ -44,3 +45,9 @@ class KNN:
         if user_no_list:
             return rst[0]
         return rst
+
+    def save(self, file):
+        DAL.file.save((self.sample, self.k), file)
+
+    def load(self, file):
+        (self.sample, self.k) = DAL.file.load(file)

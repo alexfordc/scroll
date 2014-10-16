@@ -66,6 +66,8 @@ class SVM:
         self.svm = svm_train(label, data_dict, param)
 
     def classify(self, data):
+        if self.svm is None:
+            raise Exception("Need train first")
         if len(data) == 0:
             raise Exception("Null data list")
         user_no_list = False
@@ -87,3 +89,9 @@ class SVM:
         if user_no_list:
             return rst[0]
         return rst
+
+    def save(self, file):
+        svm_save_model(file, self.svm)
+
+    def load(self, file):
+        self.svm = svm_load_model(file)
