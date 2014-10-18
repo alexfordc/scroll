@@ -1,6 +1,6 @@
 __author__ = 'ict'
 
-from extern.svmutil import *
+from extern.libsvm.svmutil import *
 
 svm_type = {
     "C-SVC": 0,
