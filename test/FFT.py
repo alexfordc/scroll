@@ -1,6 +1,6 @@
 __author__ = 'ict'
 
-from calculate.helper.fft import *
+from calculate.helper.FFT import *
 
 # 创建list类型的测试数据
 test_list = [1, 2, 3, 4, 5, 6, 7, 8]
