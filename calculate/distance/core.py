@@ -4,6 +4,7 @@ from calculate.distance import euclid
 from calculate.distance import manhattan
 from calculate.distance import chebyshev
 from calculate.distance import minkowski
+from calculate.distance import cos
 
 callback_index = 0
 option_indx = 1
@@ -12,7 +13,8 @@ method_set = {
     "euclid": (euclid, False),
     "manhattan": (manhattan, False),
     "chebyshev": (chebyshev, False),
-    "minkowski": (minkowski, True)
+    "minkowski": (minkowski, True),
+    "cos": (cos, False),
 }
 
 

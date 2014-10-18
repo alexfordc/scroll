@@ -1,12 +1,20 @@
 __author__ = 'ict'
 
 from calculate.similarity import cos
+from calculate.similarity import euclid
+from calculate.similarity import manhattan
+from calculate.similarity import chebyshev
+from calculate.similarity import minkowski
 
 callback_index = 0
 option_index = 1
 
 method_set = {
     "cos": (cos, False),
+    "euclid": (euclid, False),
+    "manhattan": (manhattan, False),
+    "chebyshev": (chebyshev, False),
+    "minkowski": (minkowski, True),
 }
 
 
