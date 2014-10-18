@@ -43,6 +43,8 @@ class Yahoo:
                 if len(option_list) > 1:
                     tmp_data[date] = []
                     for option_elem in option_list:
+                        if len(option_elem) == 0:
+                            continue
                         if option_elem not in data_offset:
                             raise Exception("Invalid data option: " + option_elem)
                         tmp_rst = item[data_offset[option_elem]]
