@@ -5,6 +5,7 @@ from calculate.similarity import euclid
 from calculate.similarity import manhattan
 from calculate.similarity import chebyshev
 from calculate.similarity import minkowski
+from calculate.similarity import pearson
 
 callback_index = 0
 option_index = 1
@@ -15,6 +16,7 @@ method_set = {
     "manhattan": (manhattan, False),
     "chebyshev": (chebyshev, False),
     "minkowski": (minkowski, True),
+    "pearson": (pearson, False),
 }
 
 
