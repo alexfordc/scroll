@@ -9,6 +9,7 @@ from calculate.feature import KDJ
 from calculate.feature import EMA
 from calculate.feature import MACD
 from calculate.feature import SMA
+from calculate.feature import FFT
 
 callback_index = 0
 option_indx = 1
@@ -25,6 +26,7 @@ method_set = {
     "EMA": (EMA, True, False),
     "MACD": (MACD, True, False),
     "SMA": (SMA, True, False),
+    "FFT": (FFT, True, False),
 }
 
 
