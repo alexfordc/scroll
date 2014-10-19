@@ -5,6 +5,7 @@ from calculate.distance import manhattan
 from calculate.distance import chebyshev
 from calculate.distance import minkowski
 from calculate.distance import cos
+from calculate.distance import pearson
 
 callback_index = 0
 option_indx = 1
@@ -15,6 +16,7 @@ method_set = {
     "chebyshev": (chebyshev, False),
     "minkowski": (minkowski, True),
     "cos": (cos, False),
+    "pearson": (pearson, False)
 }
 
 
