@@ -14,10 +14,9 @@ def svd(data_dict, r=0.9):
     data_mat = numpy.mat(data)
     u, sigma, vt = numpy.linalg.svd(data_mat.T)
     n = 0
-    sigma2 = sigma ** 2
-    max_power = sum(sigma2)
+    max_power = sum(sigma)
     for i in range(1, len(sigma) + 1):
-        if sum(sigma2[:i]) >= r * max_power:
+        if sum(sigma[:i]) >= r * max_power:
             n = i
             break
     reduce_mat = data_mat * u[:, : n] * numpy.mat(numpy.eye(n) * sigma[:n])
