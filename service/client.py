@@ -1,6 +1,7 @@
 __author__ = 'ict'
 
 import socket
+import os
 
 import DAL.file
 
@@ -21,13 +22,13 @@ class Client:
         filename = name + "." + data_type
         DAL.file.save(var, filename)
         self.sk.send(package("save"))
-        while not self.sk.recv(1024).decode() == "name":
+        while not self.sk.recv(256).decode() == "name":
             pass
         self.sk.send(package(name))
-        while not self.sk.recv(1024).decode() == "type":
+        while not self.sk.recv(256).decode() == "type":
             pass
         self.sk.send(package(data_type))
-        while not self.sk.recv(1024).decode() == "data":
+        while not self.sk.recv(256).decode() == "data":
             pass
         fp = open(filename, "rb")
         while True:
@@ -36,3 +37,22 @@ class Client:
                 break
             self.sk.send(data)
         fp.close()
+        os.remove(filename)
+
+    def load(self, name):
+        self.sk.send(package("load"))
+        while not self.sk.recv(256).decode() == "name":
+            pass
+        self.sk.send(package(name))
+        filename = self.sk.recv(256).decode()
+        self.sk.send(package("data"))
+        fp = open(filename, "wb")
+        while True:
+            data = self.sk.recv(1024 * 1024)
+            fp.write(data)
+            if len(data) < 1024 * 1024:
+                break
+        fp.close()
+        var = DAL.file.load(filename)
+        os.remove(filename)
+        return var

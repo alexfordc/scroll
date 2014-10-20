@@ -5,4 +5,4 @@ port = 8088
 
 max_connection = 32
 
-save_path = r".\save"
+save_path = r"save"
