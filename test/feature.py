@@ -6,7 +6,7 @@ import calculate.feature.core
 # 这段代码测试所有特征的计算
 
 # 读取存放在e盘下的yahoo股票数据，使用数据中的所有价格数据。
-data = DAL.yahoo.csv(r"e:\stockdata", "open high low close adjclose")
+data = DAL.yahoo.mysqldb("219.223.251.24", "root", None, "stock", "open high low close adjclose")
 
 # 选择要计算的所有特征名称
 mtd_str = "MA, MA cross, price return, change rate, RSV, KDJ, EMA, MACD, SMA"

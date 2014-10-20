@@ -1,5 +1,7 @@
 __author__ = 'ict'
 
+import copy
+
 data_offset = {
     "date":     0,
     "open":     1,
@@ -24,7 +26,7 @@ class Yahoo:
     #   close    - 收盘价
     #   volume   - 成交量
     #   adjclose - 复权价
-    def create(self, drivers=None, option="adjclose"):
+    def create(self, drivers=None, option="adjclose", align=True):
         if drivers is None:
             drivers = self.drivers
         if drivers is None:
@@ -65,24 +67,32 @@ class Yahoo:
                 dv.clean()
         date_list = [int(date) for date in list(date_set)]
         date_list.sort()
-        for stock_id, tmp_data in tmp_dict.items():
-            price_list = []
-            zero_start = False
-            nozero = 0
-            for date in date_list:
-                if date in tmp_data:
-                    if zero_start and nozero == 0:
-                        nozero = len(price_list)
-                    price_list.append(tmp_data[date])
-                elif len(price_list) == 0:
-                    price_list.append(0)
-                    zero_start = True
-                else:
-                    price_list.append(price_list[-1])
-            if zero_start:
-                for i in range(nozero):
-                    price_list[i] = price_list[nozero]
-            self.data[stock_id] = price_list
+        if align:
+            for stock_id, tmp_data in tmp_dict.items():
+                dataset_list = []
+                zero_start = False
+                nozero = 0
+                for date in date_list:
+                    if date in tmp_data:
+                        if zero_start and nozero == 0:
+                            nozero = len(dataset_list)
+                        dataset_list.append(tmp_data[date])
+                    elif len(dataset_list) == 0:
+                        dataset_list.append(0)
+                        zero_start = True
+                    else:
+                        dataset_list.append(copy.copy(dataset_list[-1]))
+                if zero_start:
+                    for i in range(nozero):
+                        dataset_list[i] = copy.copy(dataset_list[nozero])
+                self.data[stock_id] = dataset_list
+        else:
+            for stock_id, tmp_data in tmp_dict.items():
+                dataset_list = []
+                for date in date_list:
+                    if date in tmp_data:
+                        dataset_list.append(tmp_data[date])
+                self.data[stock_id] = dataset_list
 
     def data(self, stock_id):
         if stock_id not in self.data:

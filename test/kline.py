@@ -5,7 +5,7 @@ from interface.gui.kline import Kline
 import calculate.feature.core
 
 # 读取yahoo股票数据到data变量
-data = DAL.yahoo.csv(r"e:\stockdata", "open high low close volume")
+data = DAL.yahoo.mysqldb("219.223.251.24", "root", None, "stock", "open high low close volume")
 
 # 取股票代码为600888的数据到d变量
 d = data["ss600888"]

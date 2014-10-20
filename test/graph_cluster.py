@@ -8,7 +8,7 @@ import interface.console.print_cluster  # 聚类结果输出函数
 import calculate.helper.threshold  # 阈值化处理的相关函数
 
 # 读取存放在e盘下的yahoo股票数据，使用数据中的复权值（adjclose）。
-data = DAL.yahoo.csv(r"e:\stockdata", "adjclose")
+data = DAL.yahoo.mysqldb("219.223.251.24", "root", None, "stock", "adjclose")
 
 # 使用生成器以“price return”为特征，用余弦（cos）相似度进行网络构建。
 g = calculate.generator.graph_relation(data, "price return", "cos", True)

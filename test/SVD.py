@@ -4,7 +4,7 @@ from calculate.helper.SVD import *
 import DAL.yahoo
 
 # 读取yahoo股票数据
-data = DAL.yahoo.csv(r"e:\stockdata", "adjclose")
+data = DAL.yahoo.mysqldb("219.223.251.24", "root", None, "stock", "adjclose")
 
 # 构建测试dict
 test_dict = {
