@@ -4,10 +4,9 @@ import threading
 import os
 
 import service.configure
-
-
-def package(text):
-    return text.encode(encoding='utf-8', errors='strict')
+from service.helper import package
+from service.helper import send_file
+from service.helper import receive_file
 
 
 def get_vardict():
@@ -35,14 +34,7 @@ class ServerThread(threading.Thread):
                 data_name = self.connect.recv(256).decode()
                 self.connect.send(package("type"))
                 data_type = self.connect.recv(256).decode()
-                self.connect.send(package("data"))
-                fp = open(service.configure.save_path + data_name + "." + data_type, "wb")
-                while True:
-                    data = self.connect.recv(1024 * 1024)
-                    fp.write(data)
-                    if len(data) < 1024 * 1024:
-                        break
-                fp.close()
+                receive_file(self.connect, service.configure.save_path + data_name + "." + data_type)
             elif cmd == "load":
                 self.connect.send(package("name"))
                 data_name = self.connect.recv(256).decode()
@@ -51,12 +43,4 @@ class ServerThread(threading.Thread):
                 if data_name in vs:
                     filename = data_name + "." + vs[data_name]
                 self.connect.send(package(filename))
-                while not self.connect.recv(256).decode() == "data":
-                    pass
-                fp = open(service.configure.save_path + filename, "rb")
-                while True:
-                    data = fp.read(1024 * 1024)
-                    if not data:
-                        break
-                    self.connect.send(data)
-                fp.close()
+                send_file(self.connect, service.configure.save_path + filename)
