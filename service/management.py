@@ -14,11 +14,22 @@ size_title = "size"
 lock_title = "lock"
 
 
+def normal_size(size):
+    if size < 1024:
+        return str(size) + "B"
+    elif 1024 < size < 1024 * 1024:
+        str_size = str(size / 1024)
+        return str_size[: str_size.find(".") + 3] + "K"
+    else:
+        str_size = str(size / (1024 * 1024))
+        return str_size[: str_size.find(".") + 3] + "M"
+
+
 def print_list(var_dict):
-    name_len = 4
-    type_len = 4
-    size_len = 4
-    lock_len = 5
+    name_len = len(name_title)
+    type_len = len(type_title)
+    size_len = len(size_title)
+    lock_len = len(lock_title)
     for name, attr in var_dict.items():
         if len(str(name)) > name_len:
             name_len = len(str(name))
@@ -26,6 +37,8 @@ def print_list(var_dict):
             type_len = len(str(attr[type_offset]))
         if len(str(attr[size_offset])) > size_len:
             size_len = len(str(attr[size_offset]))
+        if len(str(attr[lock_offset])) > lock_len:
+            lock_len = len(str(attr[lock_offset]))
     print("+-" + "-" * name_len + "-+-" + "-" * type_len + "-+-" + "-" * size_len + "-+-" + "-" * lock_len + "-+")
     print("| " + name_title + " " * (name_len - len(name_title)), end="")
     print(" | " + type_title + " " * (type_len - len(type_title)), end="")
@@ -33,9 +46,10 @@ def print_list(var_dict):
     print(" | " + lock_title + " " * (lock_len - len(lock_title)) + " |")
     print("+-" + "-" * name_len + "-+-" + "-" * type_len + "-+-" + "-" * size_len + "-+-" + "-" * lock_len + "-+")
     for name, attr in var_dict.items():
+        size_str = normal_size(attr[size_offset])
         print("| " + str(name) + " " * (name_len - len(str(name))), end="")
         print(" | " + str(attr[type_offset]) + " " * (type_len - len(str(attr[type_offset]))), end="")
-        print(" | " + str(attr[size_offset]) + " " * (size_len - len(str(attr[size_offset]))), end="")
+        print(" | " + str(size_str) + " " * (size_len - len(size_str)), end="")
         print(" | " + str(attr[lock_offset]) + " " * (lock_len - len(str(attr[lock_offset]))) + " |")
     print("+-" + "-" * name_len + "-+-" + "-" * type_len + "-+-" + "-" * size_len + "-+-" + "-" * lock_len + "-+")
 
