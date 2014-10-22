@@ -11,6 +11,8 @@ lock_offset = 2
 
 success_msg = "Success"
 locked_msg = "Object locked"
+noexist_msg = "No such object: "
+exist_msg = "Object have exist: "
 
 
 class ObjectPool:
@@ -74,7 +76,7 @@ class ObjectPool:
         self.lock()
         if name not in self.obj:
             self.unlock()
-            return "No such object named: " + name
+            return noexist_msg + name
         if self.obj[name][lock_offset]:
             self.unlock()
             return locked_msg
@@ -88,7 +90,7 @@ class ObjectPool:
         self.lock()
         if name not in self.obj:
             self.unlock()
-            return "No such object named: " + name
+            return noexist_msg + name
         if self.obj[name][lock_offset]:
             self.unlock()
             return locked_msg
@@ -101,13 +103,13 @@ class ObjectPool:
         self.lock()
         if name not in self.obj:
             self.unlock()
-            return "No such object named: " + name
+            return noexist_msg + name
         if self.obj[name][lock_offset]:
             self.obj[name][lock_offset] = False
             self.unlock()
             return success_msg
         self.unlock()
-        return "Object not locked"
+        return success_msg
 
     def filename_object(self, name):
         self.lock()
@@ -130,6 +132,7 @@ class ObjectPool:
             self.unlock()
             return
         self.obj[name][size_offset] = os.path.getsize(self.save_dir + self.filename(name))
+        self.dump()
         self.unlock()
 
     def copy_object(self):
@@ -137,3 +140,42 @@ class ObjectPool:
         tmp = self.obj.copy()
         self.unlock()
         return tmp
+
+    def rename_object(self, name, rename):
+        self.lock()
+        if name not in self.obj:
+            self.unlock()
+            return noexist_msg + name
+        if self.obj[name][lock_offset]:
+            self.unlock()
+            return locked_msg
+        if rename in self.obj:
+            self.unlock()
+            return exist_msg + rename
+        tmp = self.obj[name].copy()
+        src = self.filename(name)
+        del self.obj[name]
+        self.obj[rename] = tmp
+        dst = self.filename(rename)
+        os.rename(src, dst)
+        self.dump()
+        self.unlock()
+        return success_msg
+
+    def get_object(self, name):
+        self.lock()
+        if name not in self.obj:
+            self.unlock()
+            return noexist_msg + name
+        data = DAL.file.load(self.save_dir + self.filename(name))
+        self.unlock()
+        return data
+
+    def get_type(self, name):
+        self.lock()
+        if name not in self.obj:
+            self.unlock()
+            return noexist_msg + name
+        rst = self.obj[name][type_offset]
+        self.unlock()
+        return rst

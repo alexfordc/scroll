@@ -66,3 +66,25 @@ class Client:
         self.sk.send(package("list"))
         rst = self.sk.recv(service.configure.msg_buffer).decode()
         return eval(rst)
+
+    def rename(self, src_name, dst_name):
+        self.sk.send(package("rename"))
+        response(self.sk, "name", src_name)
+        response(self.sk, "rename", dst_name)
+        rst = self.sk.recv(service.configure.msg_buffer).decode()
+        return rst
+
+    def compute(self, src_name, dst_name, func_name, option):
+        if func_name == "feature":
+            self.sk.send(package("feature"))
+            response(self.sk, "name", src_name)
+            response(self.sk, "rstname", dst_name)
+            response(self.sk, "mtd", str(option["mtd"]))
+            response(self.sk, "option", str(option["option"]))
+            response(self.sk, "main", str(option["main"]))
+            if "unpack" in option:
+                response(self.sk, "unpack", str(option["unpack"]))
+            else:
+                response(self.sk, "unpack", "False")
+            rst = self.sk.recv(service.configure.msg_buffer).decode()
+            return rst

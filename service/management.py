@@ -58,19 +58,31 @@ if __name__ == "__main__":
     while True:
         var = c.list()
         print_list(var)
-        cmd = ""
-        while len(cmd) == 0:
-            cmd = input(">>> ")
+        cmd = input(">>> ")
         tmp_list = cmd.split(" ")
         cmd_list = []
         for one_cmd in tmp_list:
             if len(one_cmd) != 0:
                 cmd_list.append(one_cmd)
+        if len(cmd_list) == 0:
+            continue
         if cmd_list[0] == "print":
+            if len(cmd_list) != 2:
+                print("Usage: print <variable>")
+                continue
             pprint.pprint(c.load(cmd_list[1]))
             print("")
         elif cmd_list[0] == "remove":
-            pprint.pprint(c.remove(cmd_list[1]))
+            if len(cmd_list) != 2:
+                print("Usage: remove <variable>")
+                continue
+            print(c.remove(cmd_list[1]))
+            print("")
+        elif cmd_list[0] == "rename":
+            if len(cmd_list) != 3:
+                print("Usage: rename <old variable> <new variable>")
+                continue
+            print(c.rename(cmd_list[1], cmd_list[2]))
             print("")
         elif cmd_list[0] == "exit" or cmd_list[0] == "quit":
             c.close()
