@@ -4,6 +4,8 @@ import socket
 import os
 
 import DAL.file
+import calculate.classify.SVM
+import calculate.classify.KNN
 import service.configure
 import service.object_pool
 from service.helper import package
@@ -29,8 +31,17 @@ class Client:
     def save(self, var, name):
         self.sk.send(package("save"))
         data_type = str(type(var))[8:-2]
+        if data_type == "calculate.classify.SVM.SVM":
+            data_type = "svm"
+        elif data_type == "calculate.classify.KNN.KNN":
+            data_type = "knn"
         filename = name + "." + data_type
-        DAL.file.save(var, filename)
+        if data_type == "svm":
+            var.save(filename)
+        elif data_type == "knn":
+            var.save(filename)
+        else:
+            DAL.file.save(var, filename)
         response(self.sk, "name", name)
         response(self.sk, "type", data_type)
         state = self.sk.recv(service.configure.msg_buffer).decode()
@@ -50,7 +61,16 @@ class Client:
         if state != service.object_pool.success_msg:
             return None
         receive_file(self.sk, filename)
-        var = DAL.file.load(filename)
+        if filename.split(".")[1] == "svm":
+            tmp_svm = calculate.classify.SVM.SVM()
+            tmp_svm.load(filename)
+            var = tmp_svm
+        elif filename.split(".")[1] == "knn":
+            tmp_knn = calculate.classify.KNN.KNN()
+            tmp_knn.load(filename)
+            var = tmp_knn
+        else:
+            var = DAL.file.load(filename)
         os.remove(filename)
         return var
 
