@@ -23,6 +23,7 @@ class Client:
             raise Exception("Can not connect")
 
     def close(self):
+        self.sk.send(package("close"))
         self.sk.close()
 
     def save(self, var, name):

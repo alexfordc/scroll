@@ -1,6 +1,7 @@
 __author__ = 'ict'
 
 import socket
+import time
 
 import service.configure
 import service.control
@@ -20,6 +21,7 @@ if __name__ == "__main__":
     print("Listening...")
     while True:
         connection, address = sk.accept()
-        print("[New connection] %s:%s" % (address[0], address[1]))
+        time_str = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+        print("%s [New connection] %s:%s" % (time_str, address[0], address[1]))
         server_pool.append(service.control.ServerThread(connection, address, op))
         server_pool[-1].start()
