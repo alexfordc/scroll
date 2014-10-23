@@ -22,7 +22,13 @@ class ServerThread(threading.Thread):
         self.object_pool = object_pool
 
     def run(self):
-        self.connect.send(package("start"))
+        try:
+            self.connect.send(package("start"))
+        except ConnectionError:
+            time_str = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+            print("%s [%s:%s] Abnormal connection." % (time_str, self.address[0], self.address[1]))
+            self.connect.close()
+            return
         if service.configure.save_path[-1] != os.path.sep:
             service.configure.save_path += os.path.sep
         while True:
