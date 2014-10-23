@@ -179,7 +179,7 @@ class ObjectPool:
         del self.obj[name]
         self.obj[rename] = tmp
         dst = self.filename(rename)
-        os.rename(src, dst)
+        os.rename(self.save_dir + src, self.save_dir + dst)
         self.dump()
         self.unlock()
         return success_msg

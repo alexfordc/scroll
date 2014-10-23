@@ -30,7 +30,7 @@ method_set = {
 }
 
 
-def method(mtd, data_list, option=None, main=None):
+def method(mtd, data_list, option=None, main=None, unpack=False):
     single_data_list = []
     if isinstance(data_list[0], list):
         multidata = True
@@ -81,10 +81,19 @@ def method(mtd, data_list, option=None, main=None):
                 rst.append(method_set[mtd_list[i]][callback_index].compute(_data_list, option[i]))
         else:
             rst.append(method_set[mtd_list[i]][callback_index].compute(_data_list))
-    if len(rst) == 1:
-        return rst[0]
+    if unpack:
+        new_rst = []
+        for ft in rst:
+            if isinstance(ft, list):
+                new_rst.extend(ft)
+            else:
+                new_rst.append(ft)
     else:
-        return rst
+        new_rst = rst
+    if len(new_rst) == 1:
+        return new_rst[0]
+    else:
+        return new_rst
 
 
 def get_function(mtd):

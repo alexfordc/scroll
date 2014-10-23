@@ -35,8 +35,8 @@ def print_list(var_dict):
             name_len = len(str(name))
         if len(str(attr[type_offset])) > type_len:
             type_len = len(str(attr[type_offset]))
-        if len(str(attr[size_offset])) > size_len:
-            size_len = len(str(attr[size_offset]))
+        if len(normal_size(attr[size_offset])) > size_len:
+            size_len = len(normal_size(attr[size_offset]))
         if len(str(attr[lock_offset])) > lock_len:
             lock_len = len(str(attr[lock_offset]))
     print("+-" + "-" * name_len + "-+-" + "-" * type_len + "-+-" + "-" * size_len + "-+-" + "-" * lock_len + "-+")
@@ -72,9 +72,9 @@ if __name__ == "__main__":
                 continue
             pprint.pprint(c.load(cmd_list[1]))
             print("")
-        elif cmd_list[0] == "remove":
+        elif cmd_list[0] == "remove" or cmd_list[0] == "rm":
             if len(cmd_list) != 2:
-                print("Usage: remove <variable>")
+                print("Usage: remove[rm] <variable>")
                 continue
             print(c.remove(cmd_list[1]))
             print("")
@@ -84,8 +84,27 @@ if __name__ == "__main__":
                 continue
             print(c.rename(cmd_list[1], cmd_list[2]))
             print("")
+        elif cmd_list[0] == "copy" or cmd_list[0] == "clone":
+            if len(cmd_list) != 3:
+                print("Usage: copy[clone] <src variable> <dst variable>")
+                continue
+            print(c.clone(cmd_list[1], cmd_list[2]))
         elif cmd_list[0] == "exit" or cmd_list[0] == "quit":
+            if len(cmd_list) != 1:
+                print("Usage: exit[quit]")
+                continue
             c.close()
             break
+        elif cmd_list[0] == "help" or cmd_list[0] == "?":
+            if len(cmd_list) != 1:
+                print("Usage: help[?]")
+                continue
+            print("print <variable>                          - print a variable.")
+            print("remove[rm] <variable>                     - remove a variable.")
+            print("rename <old variable> <new variable>      - rename a variable.")
+            print("copy[clone] <src variable> <dst variable> - copy a variable to a new variable.")
+            print("exit[quit]                                - quit management system.")
+            print("help[?]                                   - print this message.")
+            print("")
         else:
             print("Invild command: " + cmd)
