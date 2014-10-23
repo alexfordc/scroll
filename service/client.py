@@ -74,17 +74,28 @@ class Client:
         rst = self.sk.recv(service.configure.msg_buffer).decode()
         return rst
 
-    def compute(self, src_name, dst_name, func_name, option):
-        if func_name == "feature":
-            self.sk.send(package("feature"))
-            response(self.sk, "name", src_name)
-            response(self.sk, "rstname", dst_name)
-            response(self.sk, "mtd", str(option["mtd"]))
-            response(self.sk, "option", str(option["option"]))
-            response(self.sk, "main", str(option["main"]))
-            if "unpack" in option:
-                response(self.sk, "unpack", str(option["unpack"]))
-            else:
-                response(self.sk, "unpack", "False")
-            rst = self.sk.recv(service.configure.msg_buffer).decode()
-            return rst
+    def clone(self, src_name, dst_name):
+        self.sk.send(package("clone"))
+        response(self.sk, "name", src_name)
+        response(self.sk, "clonename", dst_name)
+        rst = self.sk.recv(service.configure.msg_buffer).decode()
+        return rst
+
+    def compute_feature(self, src_name, dst_name, mtd, option, main, unpack=False):
+        self.sk.send(package("feature"))
+        response(self.sk, "name", src_name)
+        response(self.sk, "rstname", dst_name)
+        response(self.sk, "mtd", str(mtd))
+        response(self.sk, "option", str(option))
+        response(self.sk, "main", str(main))
+        response(self.sk, "unpack", str(unpack))
+        rst = self.sk.recv(service.configure.msg_buffer).decode()
+        return rst
+
+    def compute_pca(self, src_name, dst_name, n=0):
+        self.sk.send(package("pca"))
+        response(self.sk, "name", src_name)
+        response(self.sk, "rstname", dst_name)
+        response(self.sk, "n", str(n))
+        rst = self.sk.recv(service.configure.msg_buffer).decode()
+        return rst

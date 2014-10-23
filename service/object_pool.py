@@ -2,6 +2,7 @@ __author__ = 'ict'
 
 import os
 import threading
+import shutil
 
 import DAL.file
 
@@ -10,9 +11,10 @@ size_offset = 1
 lock_offset = 2
 
 success_msg = "Success"
-locked_msg = "Object locked"
+locked_msg = "Object locked: "
 noexist_msg = "No such object: "
 exist_msg = "Object have exist: "
+unavilable_msg = "Object unavilable: "
 
 
 class ObjectPool:
@@ -33,6 +35,8 @@ class ObjectPool:
             self.obj = {}
         else:
             self.obj = DAL.file.load(self.save_dir + self.dump_file)
+        for _, attr in self.obj.items():
+            attr[lock_offset] = False
 
     def dump(self):
         DAL.file.save(self.obj, self.save_dir + self.dump_file)
@@ -58,7 +62,18 @@ class ObjectPool:
     def have_object(self, name):
         self.lock()
         self.check()
+        self.dump()
         rst = name in self.obj
+        self.unlock()
+        return rst
+
+    def avilable_object(self, name):
+        self.lock()
+        self.check()
+        self.dump()
+        rst = name in self.obj
+        if rst:
+            rst = not self.obj[name][lock_offset]
         self.unlock()
         return rst
 
@@ -66,7 +81,7 @@ class ObjectPool:
         self.lock()
         if name in self.obj:
             self.unlock()
-            return "Object has exist: " + name
+            return exist_msg + name
         self.obj[name] = [data_type, int(size), False]
         self.dump()
         self.unlock()
@@ -79,7 +94,7 @@ class ObjectPool:
             return noexist_msg + name
         if self.obj[name][lock_offset]:
             self.unlock()
-            return locked_msg
+            return locked_msg + name
         filename = self.filename(name)
         os.remove(self.save_dir + filename)
         del self.obj[name]
@@ -93,7 +108,7 @@ class ObjectPool:
             return noexist_msg + name
         if self.obj[name][lock_offset]:
             self.unlock()
-            return locked_msg
+            return locked_msg + name
         else:
             self.obj[name][lock_offset] = True
         self.unlock()
@@ -108,6 +123,16 @@ class ObjectPool:
             self.obj[name][lock_offset] = False
             self.unlock()
             return success_msg
+        self.unlock()
+        return success_msg
+
+    def save_object(self, name, data):
+        self.lock()
+        if name not in self.obj:
+            self.unlock()
+            return noexist_msg + name
+        filename = self.filename(name)
+        DAL.file.save(data, self.save_dir + filename)
         self.unlock()
         return success_msg
 
@@ -128,14 +153,11 @@ class ObjectPool:
         if name not in self.obj:
             self.unlock()
             return
-        if self.obj[name][lock_offset]:
-            self.unlock()
-            return
         self.obj[name][size_offset] = os.path.getsize(self.save_dir + self.filename(name))
         self.dump()
         self.unlock()
 
-    def copy_object(self):
+    def copy_entry_object(self):
         self.lock()
         tmp = self.obj.copy()
         self.unlock()
@@ -148,7 +170,7 @@ class ObjectPool:
             return noexist_msg + name
         if self.obj[name][lock_offset]:
             self.unlock()
-            return locked_msg
+            return locked_msg + name
         if rename in self.obj:
             self.unlock()
             return exist_msg + rename
@@ -159,6 +181,22 @@ class ObjectPool:
         dst = self.filename(rename)
         os.rename(src, dst)
         self.dump()
+        self.unlock()
+        return success_msg
+
+    def clone_object(self, name, clonename):
+        self.lock()
+        if name not in self.obj:
+            self.unlock()
+            return noexist_msg + name
+        if self.obj[name][lock_offset]:
+            self.unlock()
+            return locked_msg + name
+        if clonename in self.obj:
+            self.unlock()
+            return exist_msg + clonename
+        self.obj[clonename] = self.obj[name]
+        shutil.copyfile(self.save_dir + self.filename(name), self.save_dir + self.filename(clonename))
         self.unlock()
         return success_msg
 
