@@ -56,16 +56,18 @@ def print_list(var_dict):
 
 
 def lexical_analyzer(cmd):
-    keywords = {"print", "remove", "rm", "rename", "copy", "clone", "exit", "quit"}
+    keywords = {"print", "remove", "rm", "rename", "copy", "clone", "exit", "quit", "let"}
     token_specification = [
         ("number", r"\d+(\.\d*)?"),
         ("assign", r"="),
         ("name", r'[_A-Za-z][_A-Za-z0-9]*'),
-        ("punctuation", r"\(\)\{\},"),
+        ("string", r"\".*?\""),
+        ("punctuation", r"[\(\)\{\}\,\[\]\:]"),
         ("skip", r"[ \t]+"),
         ("mismatch", r"."),
     ]
     token_regex = "|".join("(?P<%s>%s)" % pair for pair in token_specification)
+    token_list = []
     for m in re.finditer(token_regex, cmd):
         kind = m.lastgroup
         value = m.group(kind)
@@ -73,9 +75,12 @@ def lexical_analyzer(cmd):
             pass
         elif kind == "mismatch":
             raise Exception("Unexpected token: %s" % value)
-        elif:
-
-
+        else:
+            if value in keywords:
+                token_list.append(("keyword", value))
+            else:
+                token_list.append((kind, value))
+    return token_list
 
 
 if __name__ == "__main__":
