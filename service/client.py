@@ -102,6 +102,9 @@ class Client:
         rst = self.sk.recv(service.configure.msg_buffer).decode()
         return rst
 
+    def exec(self, file):
+        self.sk.send(package("exec"))
+
     def compute_feature(self, src_name, dst_name, mtd, option, main, unpack=False):
         self.sk.send(package("feature"))
         response(self.sk, "name", src_name)

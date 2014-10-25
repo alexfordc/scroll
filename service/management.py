@@ -91,6 +91,11 @@ if __name__ == "__main__":
                 print("Usage: copy[clone] <src variable> <dst variable>")
                 continue
             print(c.clone(cmd_list[1], cmd_list[2]))
+        elif cmd_list[0] == "exec":
+            if len(cmd_list) != 2:
+                print("Usage: exec <file>")
+                continue
+            print(c.exec(cmd_list[1]))
         elif cmd_list[0] == "exit" or cmd_list[0] == "quit":
             if len(cmd_list) != 1:
                 print("Usage: exit[quit]")
@@ -105,6 +110,7 @@ if __name__ == "__main__":
             print("remove[rm] <variable>                     - remove a variable.")
             print("rename <old variable> <new variable>      - rename a variable.")
             print("copy[clone] <src variable> <dst variable> - copy a variable to a new variable.")
+            print("exec <file>                               - execute a python code file.")
             print("exit[quit]                                - quit management system.")
             print("help[?]                                   - print this message.")
             print("")
