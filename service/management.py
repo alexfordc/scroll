@@ -55,34 +55,6 @@ def print_list(var_dict):
     print("+-" + "-" * name_len + "-+-" + "-" * type_len + "-+-" + "-" * size_len + "-+-" + "-" * lock_len + "-+")
 
 
-def lexical_analyzer(cmd):
-    keywords = {"print", "remove", "rm", "rename", "copy", "clone", "exit", "quit", "let"}
-    token_specification = [
-        ("number", r"\d+(\.\d*)?"),
-        ("assign", r"="),
-        ("name", r'[_A-Za-z][_A-Za-z0-9]*'),
-        ("string", r"\".*?\""),
-        ("punctuation", r"[\(\)\{\}\,\[\]\:]"),
-        ("skip", r"[ \t]+"),
-        ("mismatch", r"."),
-    ]
-    token_regex = "|".join("(?P<%s>%s)" % pair for pair in token_specification)
-    token_list = []
-    for m in re.finditer(token_regex, cmd):
-        kind = m.lastgroup
-        value = m.group(kind)
-        if kind == "skip":
-            pass
-        elif kind == "mismatch":
-            raise Exception("Unexpected token: %s" % value)
-        else:
-            if value in keywords:
-                token_list.append(("keyword", value))
-            else:
-                token_list.append((kind, value))
-    return token_list
-
-
 if __name__ == "__main__":
     c = Client("219.223.243.8", 8088)
     while True:
