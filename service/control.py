@@ -31,6 +31,8 @@ class ServerThread(threading.Thread):
             return
         if service.configure.save_path[-1] != os.path.sep:
             service.configure.save_path += os.path.sep
+        if service.configure.exec_path[-1] != os.path.sep:
+            service.configure.exec_path += os.path.sep
         while True:
             try:
                 cmd = self.connect.recv(service.configure.cmd_buffer).decode()
@@ -88,6 +90,49 @@ class ServerThread(threading.Thread):
                     clone_name = request(self.connect, "clonename")
                     rst = self.object_pool.clone_object(data_name, clone_name)
                     self.connect.send(package(rst))
+                elif cmd == "execute":
+                    filename = request(self.connect, "filename")
+                    filename = service.configure.exec_path + filename
+                    count = 0
+                    real_filename = filename
+                    while os.path.exists(filename):
+                        index = filename.rfind(".")
+                        real_filename = filename[: index] + str(count) + filename[index:]
+                        count += 1
+                    filename = real_filename
+                    receive_file(self.connect, filename)
+                    outfile = filename + ".out"
+                    with open(filename, "r") as fp:
+                        data = fp.read()
+                        data.replace("\r\n", "\n")
+                        head = "import sys\nfp = open(r\"%s\", \"w\")\nsys.stdout = fp\nsys.stderr = fp\n" % outfile
+                        data = head + data
+                    with open(filename, "w") as fp:
+                        fp.write(data)
+                    os.system(service.configure.python + " " + filename)
+                    self.connect.send(package("output"))
+                    send_file(self.connect, outfile)
+                elif cmd == "file":
+                    files = os.listdir(service.configure.exec_path)
+                    file_info = []
+                    for file in files:
+                        if file[-3:] != ".py":
+                            continue
+                        file_info.append((file, os.path.getctime(service.configure.exec_path + file)))
+                    self.connect.send(package(str(file_info)))
+                elif cmd == "delete":
+                    file = request(self.connect, "file")
+                    if file == "*":
+                        files = os.listdir(service.configure.exec_path)
+                        for file in files:
+                            os.remove(service.configure.exec_path + file)
+                    else:
+                        if not os.path.exists(service.configure.exec_path + file):
+                            self.connect.send(package("No such python file: " + file))
+                        os.remove(service.configure.exec_path + file)
+                        if os.path.exists(service.configure.exec_path + file + ".out"):
+                            os.remove(service.configure.exec_path + file + ".out")
+                    self.connect.send(package(service.object_pool.success_msg))
                 elif cmd == "feature":
                     data_name = request(self.connect, "name")
                     rst_name = request(self.connect, "rstname")

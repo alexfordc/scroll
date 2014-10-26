@@ -1,7 +1,7 @@
 __author__ = 'ict'
 
 import pprint
-import re
+import time
 
 from service.client import Client
 
@@ -91,11 +91,25 @@ if __name__ == "__main__":
                 print("Usage: copy[clone] <src variable> <dst variable>")
                 continue
             print(c.clone(cmd_list[1], cmd_list[2]))
-        elif cmd_list[0] == "exec":
+        elif cmd_list[0] == "execute" or cmd_list[0] == "exec":
             if len(cmd_list) != 2:
                 print("Usage: exec <file>")
                 continue
             print(c.exec(cmd_list[1]))
+        elif cmd_list[0] == "file":
+            if len(cmd_list) != 1:
+                print("Usage: file")
+                continue
+            filelist = c.file()
+            for file in filelist:
+                print(file[0] + " " + time.strftime('[%Y-%m-%d %H:%M:%S]', time.localtime(file[1])))
+            print("")
+        elif cmd_list[0] == "delete" or cmd_list[0] == "del":
+            if len(cmd_list) != 2:
+                print("Usage: delete[del] <python file>")
+                continue
+            print(c.delete(cmd_list[1]))
+            print("")
         elif cmd_list[0] == "exit" or cmd_list[0] == "quit":
             if len(cmd_list) != 1:
                 print("Usage: exit[quit]")
@@ -110,7 +124,9 @@ if __name__ == "__main__":
             print("remove[rm] <variable>                     - remove a variable.")
             print("rename <old variable> <new variable>      - rename a variable.")
             print("copy[clone] <src variable> <dst variable> - copy a variable to a new variable.")
-            print("exec <file>                               - execute a python code file.")
+            print("execute[exec] <file>                      - execute a python code file.")
+            print("file                                      - remote python files.")
+            print("delete[del] <file>[\"*\"]                 - delete python file.")
             print("exit[quit]                                - quit management system.")
             print("help[?]                                   - print this message.")
             print("")

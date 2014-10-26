@@ -10,6 +10,7 @@ import service.configure
 import service.object_pool
 from service.helper import package
 from service.helper import response
+from service.helper import wait_cmd
 from service.file import send_file
 from service.file import receive_file
 
@@ -88,6 +89,17 @@ class Client:
         rst = self.sk.recv(service.configure.msg_buffer).decode()
         return eval(rst)
 
+    def file(self):
+        self.sk.send(package("file"))
+        rst = self.sk.recv(service.configure.msg_buffer).decode()
+        return eval(rst)
+
+    def delete(self, file):
+        self.sk.send(package("delete"))
+        response(self.sk, "file", file)
+        rst = self.sk.recv(service.configure.msg_buffer).decode()
+        return rst
+
     def rename(self, src_name, dst_name):
         self.sk.send(package("rename"))
         response(self.sk, "name", src_name)
@@ -103,7 +115,17 @@ class Client:
         return rst
 
     def exec(self, file):
-        self.sk.send(package("exec"))
+        self.sk.send(package("execute"))
+        index = file.rfind(os.path.sep)
+        filename = file[index + 1:]
+        response(self.sk, "filename", filename)
+        send_file(self.sk, file)
+        wait_cmd(self.sk, "output")
+        receive_file(self.sk, "output")
+        with open("output", "r") as fp:
+            data = fp.read()
+        os.remove("output")
+        return data
 
     def compute_feature(self, src_name, dst_name, mtd, option, main, unpack=False):
         self.sk.send(package("feature"))

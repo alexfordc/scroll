@@ -9,6 +9,9 @@ msg_buffer = 256
 cmd_buffer = 1024
 
 save_path = r"save"
+exec_path = r"exec"
+
+python = "python"
 
 object_pool_dump = "OP.ict"
 
