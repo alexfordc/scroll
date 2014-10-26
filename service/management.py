@@ -126,7 +126,7 @@ if __name__ == "__main__":
             print("copy[clone] <src variable> <dst variable> - copy a variable to a new variable.")
             print("execute[exec] <file>                      - execute a python code file.")
             print("file                                      - remote python files.")
-            print("delete[del] <file>[\"*\"]                 - delete python file.")
+            print("delete[del] <file>[\"*\"]                   - delete python file.")
             print("exit[quit]                                - quit management system.")
             print("help[?]                                   - print this message.")
             print("")
