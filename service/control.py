@@ -95,19 +95,19 @@ class ServerThread(threading.Thread):
                     filename = service.configure.exec_path + filename
                     count = 0
                     real_filename = filename
-                    while os.path.exists(filename):
+                    while os.path.exists(real_filename):
                         index = filename.rfind(".")
                         real_filename = filename[: index] + str(count) + filename[index:]
                         count += 1
                     filename = real_filename
                     receive_file(self.connect, filename)
                     outfile = filename + ".out"
-                    with open(filename, "r") as fp:
+                    with open(filename, "r", encoding="utf-8") as fp:
                         data = fp.read()
                         data.replace("\r\n", "\n")
                         head = "import sys\nfp = open(r\"%s\", \"w\")\nsys.stdout = fp\nsys.stderr = fp\n" % outfile
                         data = head + data
-                    with open(filename, "w") as fp:
+                    with open(filename, "w", encoding="utf-8") as fp:
                         fp.write(data)
                     os.system(service.configure.python + " " + filename)
                     self.connect.send(package("output"))

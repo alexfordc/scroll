@@ -68,67 +68,99 @@ if __name__ == "__main__":
                 cmd_list.append(one_cmd)
         if len(cmd_list) == 0:
             continue
-        if cmd_list[0] == "print":
-            if len(cmd_list) != 2:
-                print("Usage: print <variable>")
-                continue
-            pprint.pprint(c.load(cmd_list[1]))
-            print("")
-        elif cmd_list[0] == "remove" or cmd_list[0] == "rm":
-            if len(cmd_list) != 2:
-                print("Usage: remove[rm] <variable>")
-                continue
-            print(c.remove(cmd_list[1]))
-            print("")
-        elif cmd_list[0] == "rename":
-            if len(cmd_list) != 3:
-                print("Usage: rename <old variable> <new variable>")
-                continue
-            print(c.rename(cmd_list[1], cmd_list[2]))
-            print("")
-        elif cmd_list[0] == "copy" or cmd_list[0] == "clone":
-            if len(cmd_list) != 3:
-                print("Usage: copy[clone] <src variable> <dst variable>")
-                continue
-            print(c.clone(cmd_list[1], cmd_list[2]))
-        elif cmd_list[0] == "execute" or cmd_list[0] == "exec":
-            if len(cmd_list) != 2:
-                print("Usage: exec <file>")
-                continue
-            print(c.exec(cmd_list[1]))
-        elif cmd_list[0] == "file":
-            if len(cmd_list) != 1:
-                print("Usage: file")
-                continue
-            filelist = c.file()
-            for file in filelist:
-                print(file[0] + " " + time.strftime('[%Y-%m-%d %H:%M:%S]', time.localtime(file[1])))
-            print("")
-        elif cmd_list[0] == "delete" or cmd_list[0] == "del":
-            if len(cmd_list) != 2:
-                print("Usage: delete[del] <python file>")
-                continue
-            print(c.delete(cmd_list[1]))
-            print("")
-        elif cmd_list[0] == "exit" or cmd_list[0] == "quit":
-            if len(cmd_list) != 1:
-                print("Usage: exit[quit]")
-                continue
-            c.close()
+        start_time = time.time()
+        try:
+            if cmd_list[0] == "print":
+                if len(cmd_list) != 2:
+                    print("Usage: print <variable>")
+                    continue
+                pprint.pprint(c.load(cmd_list[1]))
+                print("")
+            elif cmd_list[0] == "remove" or cmd_list[0] == "rm":
+                if len(cmd_list) != 2:
+                    print("Usage: remove[rm] <variable>")
+                    continue
+                print(c.remove(cmd_list[1]))
+                print("")
+            elif cmd_list[0] == "rename":
+                if len(cmd_list) != 3:
+                    print("Usage: rename <old variable> <new variable>")
+                    continue
+                print(c.rename(cmd_list[1], cmd_list[2]))
+                print("")
+            elif cmd_list[0] == "copy" or cmd_list[0] == "clone":
+                if len(cmd_list) != 3:
+                    print("Usage: copy[clone] <src variable> <dst variable>")
+                    continue
+                print(c.clone(cmd_list[1], cmd_list[2]))
+            elif cmd_list[0] == "execute" or cmd_list[0] == "exec":
+                if len(cmd_list) != 2:
+                    print("Usage: exec <file>")
+                    continue
+                print(c.exec(cmd_list[1]))
+            elif cmd_list[0] == "file":
+                if len(cmd_list) != 1:
+                    print("Usage: file")
+                    continue
+                filelist = c.file()
+                for file in filelist:
+                    print(file[0] + " " + time.strftime('[%Y-%m-%d %H:%M:%S]', time.localtime(file[1])))
+                print("")
+            elif cmd_list[0] == "delete" or cmd_list[0] == "del":
+                if len(cmd_list) != 2:
+                    print("Usage: delete[del] <python file>")
+                    continue
+                print(c.delete(cmd_list[1]))
+                print("")
+            elif cmd_list[0] == "exit" or cmd_list[0] == "quit":
+                if len(cmd_list) != 1:
+                    print("Usage: exit[quit]")
+                    continue
+                c.close()
+                break
+            elif cmd_list[0] == "help" or cmd_list[0] == "?":
+                if len(cmd_list) != 1:
+                    print("Usage: help[?]")
+                    continue
+                print("print <variable>                          - print a variable.")
+                print("remove[rm] <variable>                     - remove a variable.")
+                print("rename <old variable> <new variable>      - rename a variable.")
+                print("copy[clone] <src variable> <dst variable> - copy a variable to a new variable.")
+                print("execute[exec] <file>                      - execute a python code file.")
+                print("file                                      - remote python files.")
+                print("delete[del] <file>[\"*\"]                   - delete python file.")
+                print("exit[quit]                                - quit management system.")
+                print("help[?]                                   - print this message.")
+                print("")
+            else:
+                print("Invild command: " + cmd)
+        except Exception as e:
+            print(e)
             break
-        elif cmd_list[0] == "help" or cmd_list[0] == "?":
-            if len(cmd_list) != 1:
-                print("Usage: help[?]")
-                continue
-            print("print <variable>                          - print a variable.")
-            print("remove[rm] <variable>                     - remove a variable.")
-            print("rename <old variable> <new variable>      - rename a variable.")
-            print("copy[clone] <src variable> <dst variable> - copy a variable to a new variable.")
-            print("execute[exec] <file>                      - execute a python code file.")
-            print("file                                      - remote python files.")
-            print("delete[del] <file>[\"*\"]                   - delete python file.")
-            print("exit[quit]                                - quit management system.")
-            print("help[?]                                   - print this message.")
-            print("")
+        end_time = time.time()
+        run_time = end_time - start_time
+        time_ms = int(1000 * run_time)
+        if time_ms >= 1000:
+            time_s = int(time_ms / 1000)
+            time_ms %= 1000
         else:
-            print("Invild command: " + cmd)
+            time_s = 0
+        if time_s >= 60:
+            time_m = int(time_s / 60)
+            time_s %= 60
+        else:
+            time_m = 0
+        if time_m >= 60:
+            time_h = int(time_m / 60)
+            time_m %= 60
+        else:
+            time_h = 0
+        print("Run Time: ", end="")
+        if time_h != 0:
+            print("%dh " % time_h, end="")
+        if time_m != 0:
+            print("%dm " % time_m, end="")
+        if time_s != 0:
+            print("%ds " % time_s, end="")
+        print("%dms " % time_ms, end="")
+        print("")
