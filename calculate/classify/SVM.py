@@ -47,6 +47,8 @@ class SVM:
         self.svm = None
 
     def train(self, data, label):
+        if len(data) != len(label):
+            raise Exception("data and label must have same dimension")
         data_dict = []
         if isinstance(data[0], list):
             for d in data:

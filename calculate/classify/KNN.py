@@ -17,6 +17,8 @@ class KNN:
         self.sample = [(data[i], label[i]) for i in range(len(data))]
 
     def classify(self, data):
+        if len(self.sample) == 0:
+            raise Exception("Need train first")
         if len(data) == 0:
             raise Exception("Null data list")
         user_no_list = False
