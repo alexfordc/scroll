@@ -1,7 +1,7 @@
 __author__ = 'ict'
 
 ip = "219.223.243.8"
-port = 8088
+port = 10555
 
 max_connection = 32
 file_buffer = 1024 * 1024

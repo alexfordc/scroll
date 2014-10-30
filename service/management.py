@@ -56,7 +56,7 @@ def print_list(var_dict):
 
 
 if __name__ == "__main__":
-    c = Client("219.223.243.8", 8088)
+    c = Client("219.223.243.8", 10555)
     while True:
         var = c.list()
         print_list(var)
