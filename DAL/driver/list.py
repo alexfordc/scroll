@@ -17,7 +17,8 @@ class List(Base):
             raise Exception("Need input file name")
         if not os.path.isfile(file):
             raise FileNotFoundError("No such file: " + file)
-        self.tag = file.lower()
+        dot_index = file.rfind(".")
+        self.tag = file.lower().split(os.path.sep)[-1][: dot_index]
         with open(file, "r") as l_fp:
             buff = l_fp.read()
         self.data = []
