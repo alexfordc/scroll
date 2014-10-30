@@ -3,6 +3,7 @@ __author__ = 'ict'
 import copy
 import math
 
+import DAL.file
 from calculate.helper.statistics import entropy
 
 class_index_offset = 0
@@ -105,3 +106,9 @@ class DT:
                     break
             rst.append(d_rst)
         return rst
+
+    def save(self, file):
+        DAL.file.save(self.tree, file)
+
+    def load(self, file):
+        self.tree = DAL.file.load(file)
