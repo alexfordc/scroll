@@ -37,6 +37,7 @@ class DT:
         for i in range(len(real_data[0])):
             total_sum_count = 0
             sub_info_list = []
+            iv_list = []
             for v in v_set[i]:
                 count_class = {}
                 v_sub_info = 0
@@ -52,8 +53,10 @@ class DT:
                         v_sub_info -= (_v / sum_count) * math.log(_v / sum_count)
                 v_sub_info *= sum_count
                 sub_info_list.append(v_sub_info)
+                iv_list.append(sum_count)
             sub_info = sum([info / total_sum_count for info in sub_info_list])
-            gain.append(label_info - sub_info)
+            iv = sum([-(iv_elem / total_sum_count) * math.log(iv_elem / total_sum_count) for iv_elem in iv_list])
+            gain.append((label_info - sub_info) / iv)
         max_i = gain.index(max(gain))
         sep_data_dict = {}
         sep_label_dict = {}
