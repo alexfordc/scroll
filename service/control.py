@@ -6,6 +6,7 @@ import time
 
 import calculate.feature.core
 import calculate.helper.PCA
+import calculate.helper.SVD
 import service.configure
 import service.object_pool
 from service.helper import package
@@ -181,6 +182,32 @@ class ServerThread(threading.Thread):
                     data_dict = self.object_pool.get_object(data_name)
                     try:
                         data_dict = calculate.helper.PCA.pca(data_dict, n)
+                        self.object_pool.save_object(rst_name, data_dict)
+                        self.object_pool.update_object(rst_name)
+                        self.object_pool.unlock_object(rst_name)
+                    except Exception as e:
+                        self.object_pool.unlock_object(rst_name)
+                        self.connect.send(package(str(e)))
+                        continue
+                    self.connect.send(package(service.object_pool.success_msg))
+                elif cmd == "svd":
+                    data_name = request(self.connect, "name")
+                    rst_name = request(self.connect, "rstname")
+                    r = float(request(self.connect, "r"))
+                    if not self.object_pool.avilable_object(data_name):
+                        self.connect.send(package(service.object_pool.noexist_msg + data_name))
+                        continue
+                    if self.object_pool.have_object(rst_name):
+                        self.connect.send(package(service.object_pool.exist_msg + rst_name))
+                        continue
+                    self.object_pool.add_object(rst_name, "dict", 0)
+                    rst = self.object_pool.lock_object(rst_name)
+                    if rst != service.object_pool.success_msg:
+                        self.connect.send(package(rst))
+                        continue
+                    data_dict = self.object_pool.get_object(data_name)
+                    try:
+                        data_dict = calculate.helper.SVD.svd(data_dict, r)
                         self.object_pool.save_object(rst_name, data_dict)
                         self.object_pool.update_object(rst_name)
                         self.object_pool.unlock_object(rst_name)

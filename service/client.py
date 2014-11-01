@@ -145,3 +145,11 @@ class Client:
         response(self.sk, "n", str(n))
         rst = self.sk.recv(service.configure.msg_buffer).decode()
         return rst
+
+    def compute_svd(self, src_name, dst_name, r=0.9):
+        self.sk.send(package("svd"))
+        response(self.sk, "name", src_name)
+        response(self.sk, "rstname", dst_name)
+        response(self.sk, "r", str(r))
+        rst = self.sk.recv(service.configure.msg_buffer).decode()
+        return rst
