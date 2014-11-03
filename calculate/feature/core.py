@@ -10,6 +10,10 @@ from calculate.feature import EMA
 from calculate.feature import MACD
 from calculate.feature import SMA
 from calculate.feature import FFT
+from calculate.feature import KDJ_cross
+from calculate.feature import KDJ_cross_days
+from calculate.feature import MACD_cross
+from calculate.feature import MACD_multifeature
 
 callback_index = 0
 option_indx = 1
@@ -27,6 +31,10 @@ method_set = {
     "MACD": (MACD, True, False),
     "SMA": (SMA, True, False),
     "FFT": (FFT, True, False),
+    "KDJ cross": (KDJ_cross, True, True),
+    "KDJ cross days": (KDJ_cross_days, True, True),
+    "MACD cross": (MACD_cross, True, False),
+    "MACD multifeature": (MACD_multifeature, True, False),
 }
 
 
