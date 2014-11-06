@@ -2,6 +2,8 @@ __author__ = 'ict'
 
 import pickle
 
+import calculate.helper.statistics
+
 
 class Graph:
     def __init__(self, sym=False):
@@ -149,6 +151,20 @@ class Graph:
 
     def is_complete(self):
         return self.__comp
+
+    def info(self):
+        rst = dict()
+        rst["node sum"] = len(self.__node)
+        rst["edge sum"] = len(self.__edge)
+        degree_list = [v for _, v in self.__degree.items()]
+        rst["degree sum"] = sum(degree_list)
+        rst["degree max"] = max(degree_list)
+        rst["degree min"] = min(degree_list)
+        rst["degree mean"] = calculate.helper.statistics.mean(degree_list)
+        rst["degree variance"] = calculate.helper.statistics.variance(degree_list)
+        rst["degree entropy"] = calculate.helper.statistics.entropy(degree_list)
+        rst["degree gini"] = calculate.helper.statistics.gini(degree_list)
+        return rst
 
     def save(self, file):
         with open(file, "wb") as fp:
