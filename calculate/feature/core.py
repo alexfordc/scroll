@@ -2,17 +2,19 @@ __author__ = 'ict'
 
 from calculate.feature import price_return
 from calculate.feature import change_rate
-from calculate.feature import MA_cross
-from calculate.feature import MA
 from calculate.feature import RSV
-from calculate.feature import KDJ
 from calculate.feature import EMA
-from calculate.feature import MACD
 from calculate.feature import SMA
 from calculate.feature import FFT
+from calculate.feature import MA
+from calculate.feature import MA_cross
+from calculate.feature import MA_cross_days
+from calculate.feature import KDJ
 from calculate.feature import KDJ_cross
 from calculate.feature import KDJ_cross_days
+from calculate.feature import MACD
 from calculate.feature import MACD_cross
+from calculate.feature import MACD_cross_days
 from calculate.feature import MACD_multifeature
 
 callback_index = 0
@@ -23,17 +25,19 @@ multidata_index = 2
 method_set = {
     "price return": (price_return, False, False),
     "change rate": (change_rate, False, False),
-    "MA cross": (MA_cross, True, False),
-    "MA": (MA, True, False),
     "RSV": (RSV, True, True),
-    "KDJ": (KDJ, True, True),
     "EMA": (EMA, True, False),
-    "MACD": (MACD, True, False),
     "SMA": (SMA, True, False),
     "FFT": (FFT, True, False),
+    "MA": (MA, True, False),
+    "MA cross": (MA_cross, True, False),
+    "MA cross days": (MA_cross_days, True, False),
+    "KDJ": (KDJ, True, True),
     "KDJ cross": (KDJ_cross, True, True),
     "KDJ cross days": (KDJ_cross_days, True, True),
+    "MACD": (MACD, True, False),
     "MACD cross": (MACD_cross, True, False),
+    "MACD cross days": (MACD_cross_days, True, False),
     "MACD multifeature": (MACD_multifeature, True, False),
 }
 
