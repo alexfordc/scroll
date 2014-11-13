@@ -56,7 +56,10 @@ class DT:
                 iv_list.append(sum_count)
             sub_info = sum([info / total_sum_count for info in sub_info_list])
             iv = sum([-(iv_elem / total_sum_count) * math.log(iv_elem / total_sum_count) for iv_elem in iv_list])
-            gain.append((label_info - sub_info) / iv)
+            if iv == 0:
+                gain.append(float("inf"))
+            else:
+                gain.append((label_info - sub_info) / iv)
         max_i = gain.index(max(gain))
         sep_data_dict = {}
         sep_label_dict = {}
